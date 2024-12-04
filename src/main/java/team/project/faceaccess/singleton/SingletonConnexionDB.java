@@ -9,6 +9,7 @@ public class SingletonConnexionDB {
 
     private SingletonConnexionDB() {}
 
+
     public static Connection getConnexion() {
         if (connection == null) {
             try {
