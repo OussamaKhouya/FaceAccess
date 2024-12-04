@@ -13,7 +13,7 @@ public class SingletonConnexionDB {
     public static Connection getConnexion() {
         if (connection == null) {
             try {
-                String dbUrl = "jdbc:sqlite:faceaccess.db";  // For local SQLite file
+                String dbUrl = "jdbc:sqlite:src/main/java/team/project/faceaccess/singleton/faceaccess.db";  // For local SQLite file
                 connection = DriverManager.getConnection(dbUrl);
             } catch (SQLException e) {
                 e.printStackTrace();
