@@ -6,6 +6,7 @@ module team.project.faceaccess {
     requires java.desktop;
     requires opencv ;
     requires javafx.swing;
+    requires javafx.graphics;
 
     opens team.project.faceaccess to javafx.fxml;
     opens team.project.faceaccess.draft.cv to javafx.fxml;
