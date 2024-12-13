@@ -6,6 +6,7 @@ import team.project.faceaccess.models.User;
 
 import java.util.List;
 
+
 public interface IMetier {
     List<User> getAllUsers();
     List<User> getUsersByKeyword(String keyword);
