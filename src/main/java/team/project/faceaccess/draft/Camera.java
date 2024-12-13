@@ -129,7 +129,7 @@ public class Camera extends Application {
             }
         });
 
-        faceDetector = new CascadeClassifier(getOpenCvResource(getClass(), "lbpcascades/lbpcascade_frontalface.xml"));
+        faceDetector = new CascadeClassifier(getOpenCvResource(getClass(), "./lbpcascades/lbpcascade_frontalface.xml"));
 
     }
 

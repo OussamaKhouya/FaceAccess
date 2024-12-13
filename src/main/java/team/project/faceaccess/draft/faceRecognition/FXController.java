@@ -214,7 +214,7 @@ public class FXController {
     private void trainModel() {
         // Read the data from the training set
         File root = new File("trainingset/combined/");
-
+        System.out.println(root.exists());
         if (!root.exists()) {
             // Attempt to create the directory
             if (root.mkdirs()) {

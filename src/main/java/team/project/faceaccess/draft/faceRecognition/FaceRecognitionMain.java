@@ -28,11 +28,11 @@ public class FaceRecognitionMain extends Application
 		try
 		{
 			// load the FXML resource
-			FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("JFXoverlay.fxml"));
+			FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("/team/project/faceaccess/presentation/JFXoverlay.fxml"));
 
 			// create and style a scene
 			Scene scene = new Scene(loader.load(), 800, 600);
-			scene.getStylesheets().add(String.valueOf(HelloApplication.class.getResource("application.css")));
+			scene.getStylesheets().add(String.valueOf(HelloApplication.class.getResource("/team/project/faceaccess/presentation/application.css")));
 			// create the stage with the given title and the previously created
 			// scene
 			primaryStage.setTitle("Face Detection and Tracking");
