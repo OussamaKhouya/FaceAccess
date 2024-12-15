@@ -18,6 +18,19 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
+        Stage loginStage =new Stage();
+        FXMLLoader loginLoader = new FXMLLoader(HelloApplication.class.getResource("views/login.fxml"));
+        Scene scene1 = new Scene(loginLoader.load());
+        loginStage.setTitle("Login");
+        loginStage.initStyle(StageStyle.UNDECORATED);
+        loginStage.setScene(scene1);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(5));
+        delay.setOnFinished(event -> {
+            stage.close();
+            loginStage.show();
+        });
+        delay.play();
 
     }
 

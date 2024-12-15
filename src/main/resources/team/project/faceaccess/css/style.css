@@ -1,0 +1,19 @@
+.loginButton {
+    -fx-background-color:  #40cd2f;
+}
+.loginButton:hover {
+    -fx-background-color: #606060;
+}
+.circle-button {
+    -fx-background-color: #40cd2f; /* Button background color */
+    -fx-text-fill: white;          /* Button text color */
+    -fx-border-color:white;
+    -fx-padding: 0; /* Remove default padding */
+    -fx-shape: "M100,50a50,50 0 1,1 0.1,0z"; /* Circular shape */
+}
+.topButtons  {
+    -fx-background-color:  #40cd2f;
+}
+.topButtons:hover {
+    -fx-background-color: #d5d1d1;
+}
