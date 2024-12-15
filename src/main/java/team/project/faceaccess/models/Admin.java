@@ -8,7 +8,9 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Admin extends User {
-    private String role = "Admin";
-
+public class Admin {
+    private int id;
+    private String username;
+    private String email;
+    private String password;
 }

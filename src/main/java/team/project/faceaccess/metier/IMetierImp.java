@@ -1,6 +1,7 @@
 package team.project.faceaccess.metier;
 
 import team.project.faceaccess.models.AccessLog;
+import team.project.faceaccess.models.Admin;
 import team.project.faceaccess.models.User;
 import team.project.faceaccess.singleton.SingletonConnexionDB;
 
@@ -94,6 +95,45 @@ public class IMetierImp implements IMetier{
         }
         System.out.println("Add Success");
 
+    }
+
+    @Override
+    public void addAdmin(Admin admin) {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        try {
+            String query = "INSERT INTO Admin (username,email,password) VALUES ( ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, admin.getUsername());
+            preparedStatement.setString(2, admin.getEmail());
+            preparedStatement.setString(3, admin.getPassword());
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Admin getAdmin() {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        Admin admin = new Admin();
+        try {
+            String query = "select * from Admin";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                admin.setId(resultSet.getInt("id"));
+                admin.setUsername(resultSet.getString("username"));
+                admin.setEmail(resultSet.getString("email"));
+                admin.setPassword(resultSet.getString("password"));
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return admin;
     }
 
     @Override
