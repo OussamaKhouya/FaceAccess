@@ -22,7 +22,7 @@
                         <Image url="@../assets/logo.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="CloseButton" layoutX="361.0" layoutY="3.0" minHeight="20.0" minWidth="30.0" mnemonicParsing="false" onAction="#closeLogin" prefHeight="38.0" prefWidth="36.0" styleClass="circle-button" text="x">
+                  <Button fx:id="CloseButton" layoutX="363.0" layoutY="7.0" minHeight="20.0" minWidth="30.0" mnemonicParsing="false" onAction="#closeLogin" prefHeight="39.0" prefWidth="35.0" styleClass="circle-button" text="X">
                      <font>
                         <Font size="25.0" />
                      </font>
