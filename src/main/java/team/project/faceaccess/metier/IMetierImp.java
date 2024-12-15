@@ -6,11 +6,10 @@ import team.project.faceaccess.models.User;
 import team.project.faceaccess.singleton.SingletonConnexionDB;
 
 import java.io.File;
-import java.sql.PreparedStatement;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class IMetierImp implements IMetier{
@@ -180,16 +179,131 @@ public class IMetierImp implements IMetier{
 
     @Override
     public void addLog(AccessLog log) {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        String query = "INSERT INTO AccessLog (userId, timestamp, accessGranted) VALUES (?, ?, ?)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, log.getUser().getId()); // Set the user ID
+
+            // Get current timestamp and format it
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String formattedTimestamp = now.format(formatter);
+
+            pstmt.setString(2, formattedTimestamp); // Use the formatted current timestamp
+            pstmt.setBoolean(3, log.isAccessGranted()); // Set the accessGranted flag
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void deleteLog(AccessLog log) {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        String query = "DELETE FROM AccessLog WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, log.getId()); // Set the ID of the log to delete
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public List<AccessLog> getLogs() {
-        return List.of();
+        Connection connection = SingletonConnexionDB.getConnexion();
+        String query = "SELECT * FROM AccessLog";
+        List<AccessLog> logs = new ArrayList<>();
+
+        try (Statement stmt = connection.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                AccessLog log = new AccessLog();
+                log.setId(rs.getInt("id"));
+
+                // Fetch the User by ID
+                log.setUser(fetchUserById(rs.getInt("userId")));
+
+                log.setTimestamp(LocalDateTime.parse(rs.getString("timestamp"), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+                log.setAccessGranted(rs.getBoolean("accessGranted"));
+                logs.add(log);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return logs;
     }
+
+    public User fetchUserById(int userId) {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        String query = "SELECT * FROM Users WHERE id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, userId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+                    user.setId(rs.getInt("id"));
+                    user.setFirstName(rs.getString("firstName"));
+                    user.setLastName(rs.getString("lastName"));
+                    user.setAccess(rs.getBoolean("access"));
+                    user.setDoor(rs.getString("door"));
+                    user.setRegistredDate(rs.getInt("registredDate"));
+                    user.setSex(rs.getString("sex"));
+                    return user;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if user not found or in case of error
+    }
+
+    @Override
+    public List<String> getAllDoors() throws SQLException {
+        List<String> doors = new ArrayList<>();
+        String query = "SELECT DISTINCT door FROM users";
+        Connection connection = SingletonConnexionDB.getConnexion();
+        PreparedStatement statement = connection.prepareStatement(query);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+                doors.add(resultSet.getString("door"));
+            }
+
+
+        return doors;
+    }
+
+    @Override
+    public List<User> getUsersByDoor(String door) throws SQLException {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM users WHERE door = ?";
+        Connection connection = SingletonConnexionDB.getConnexion();
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, door);
+        ResultSet resultSet = statement.executeQuery();
+        while (resultSet.next()) {
+            User user = new User(
+                            resultSet.getInt("id"),
+                            resultSet.getString("firstName"),
+                            resultSet.getString("lastName"),
+                            resultSet.getBoolean("access"),
+                            resultSet.getString("door"),
+                            resultSet.getInt("registredDate"),
+                            resultSet.getString("sex")
+                    );
+                    users.add(user);
+                }
+
+        return users;
+    }
+
+
+
+
 }
