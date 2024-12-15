@@ -12,6 +12,7 @@ module team.project.faceaccess {
     opens team.project.faceaccess.draft.cv to javafx.fxml;
     opens team.project.faceaccess.draft.faceRecognition to javafx.fxml;
     opens team.project.faceaccess.draft to javafx.fxml;
+    opens team.project.faceaccess.controller to javafx.fxml;
 
     exports team.project.faceaccess.draft.cv to javafx.graphics;
     exports team.project.faceaccess.draft.faceRecognition to javafx.graphics;

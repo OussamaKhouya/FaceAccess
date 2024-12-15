@@ -19,7 +19,7 @@ public class HelloApplication extends Application {
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
         Stage loginStage =new Stage();
-        FXMLLoader loginLoader = new FXMLLoader(HelloApplication.class.getResource("views/login.fxml"));
+        FXMLLoader loginLoader = new FXMLLoader(HelloApplication.class.getResource("views/main.fxml"));
         Scene scene1 = new Scene(loginLoader.load());
         loginStage.setTitle("Login");
         loginStage.initStyle(StageStyle.UNDECORATED);
