@@ -4,6 +4,7 @@ import team.project.faceaccess.models.AccessLog;
 import team.project.faceaccess.models.User;
 import team.project.faceaccess.singleton.SingletonConnexionDB;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.sql.Connection;
@@ -19,17 +20,18 @@ public class IMetierImp implements IMetier{
         Connection connection = SingletonConnexionDB.getConnexion();
 
         try {
-            String query = "SELECT id, name, accessStatus, photosPath FROM Users";
+            String query = "SELECT id, firstName, lastName, access, door, registredDate, sex FROM Users";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
-
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                boolean accessStatus = resultSet.getBoolean("accessStatus");
-                String photosPath = resultSet.getString("photosPath");
-
-                User user = new User(id, name, List.of(photosPath != null ? new java.io.File(photosPath) : null), accessStatus);
+                User user = new User();
+                user.setId(resultSet.getInt("id"));
+                user.setFirstName(resultSet.getString("firstName"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setDoor(resultSet.getString("door"));
+                user.setRegistredDate(resultSet.getInt("registredDate"));
+                user.setSex(resultSet.getString("sex"));
+                user.setAccess(resultSet.getBoolean("access"));
                 users.add(user);
             }
 
@@ -76,21 +78,22 @@ public class IMetierImp implements IMetier{
         Connection connection = SingletonConnexionDB.getConnexion();
 
         try {
-            String query = "INSERT INTO Users (name, accessStatus, photosPath) VALUES (?, ?, ?)";
+            String query = "INSERT INTO Users (id, firstName, lastName, access, door, registredDate, sex) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setBoolean(2, user.isAccessStatus());
-
-            // Handle photosPath
-            String photosPath = user.getPhotos() != null && !user.getPhotos().isEmpty() ? user.getPhotos().get(0).getPath() : null;
-            preparedStatement.setString(3, photosPath);
-
+            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setString(2, user.getFirstName());
+            preparedStatement.setString(3, user.getLastName());
+            preparedStatement.setBoolean(4, user.getAccess());
+            preparedStatement.setString(5, user.getDoor());
+            preparedStatement.setInt(6, user.getRegistredDate());
+            preparedStatement.setString(7, user.getSex());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("Add Success");
 
     }
 
@@ -99,15 +102,11 @@ public class IMetierImp implements IMetier{
         Connection connection = SingletonConnexionDB.getConnexion();
 
         try {
-            String query = "UPDATE Users SET name = ?, accessStatus = ?, photosPath = ? WHERE id = ?";
+            String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ? WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setBoolean(2, user.isAccessStatus());
-
-            // Handle photosPath
-            String photosPath = user.getPhotos() != null && !user.getPhotos().isEmpty() ? user.getPhotos().get(0).getPath() : null;
-            preparedStatement.setString(3, photosPath);
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setBoolean(2, user.getAccess());
 
             preparedStatement.setInt(4, user.getId());
 
