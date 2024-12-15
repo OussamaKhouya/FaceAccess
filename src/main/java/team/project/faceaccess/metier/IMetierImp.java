@@ -141,13 +141,17 @@ public class IMetierImp implements IMetier{
         Connection connection = SingletonConnexionDB.getConnexion();
 
         try {
-            String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ? WHERE id = ?";
+            //String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ? WHERE id = ?";
+            String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ?, door = ?, registredDate = ?, sex = ? WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setString(1, user.getFirstName());
-            preparedStatement.setBoolean(2, user.getAccess());
-
-            preparedStatement.setInt(4, user.getId());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setBoolean(3, user.getAccess());
+            preparedStatement.setString(4, user.getDoor());
+            preparedStatement.setInt(5, user.getRegistredDate());
+            preparedStatement.setString(6, user.getSex());
+            preparedStatement.setInt(7, user.getId());
 
             preparedStatement.executeUpdate();
             preparedStatement.close();

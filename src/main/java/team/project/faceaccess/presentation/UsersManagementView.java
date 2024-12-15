@@ -8,21 +8,30 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import team.project.faceaccess.metier.IMetier;
 import team.project.faceaccess.metier.IMetierImp;
 import team.project.faceaccess.models.User;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class UsersManagementView implements Initializable {
 
     @FXML
-    private TextField employeeIdField;
+    private TextField UserIdField;
     @FXML
     private TableColumn<User, Integer> idColumn;
 
@@ -39,7 +48,6 @@ public class UsersManagementView implements Initializable {
     private TextField departmentField;
 
 
-
     @FXML
     private TableView<User> usersTable;
 
@@ -51,7 +59,6 @@ public class UsersManagementView implements Initializable {
 
     @FXML
     private DatePicker registredDate;
-
 
 
     @FXML
@@ -86,11 +93,22 @@ public class UsersManagementView implements Initializable {
 
     User user;
 
+    void clearUserForm() {
+        UserIdField.setText("");
+        firstNameField.setText("");
+        lastNameField.setText("");
+        statusCheckBox.setSelected(false);
+        departmentField.setText("");
+        registredDate.setValue(LocalDate.now());
+        sexComboBox.getSelectionModel().select("");
+        photoView.setImage(null);
+    }
+
     @FXML
     void onLoadBtnClicked(ActionEvent event) {
         if (!usersTable.getSelectionModel().getSelectedItems().isEmpty()) {
             user = usersTable.getSelectionModel().getSelectedItem();
-            employeeIdField.setText(String.valueOf(user.getId()));
+            UserIdField.setText(String.valueOf(user.getId()));
             firstNameField.setText(user.getFirstName());
             lastNameField.setText(user.getLastName());
             statusCheckBox.setSelected(user.getAccess());
@@ -98,6 +116,9 @@ public class UsersManagementView implements Initializable {
             registredDate.setValue(LocalDate.ofEpochDay(user.getRegistredDate()));
             sexComboBox.getSelectionModel().select(user.getSex());
             System.out.println(user);
+            File file = new File(String.format("photos/active/%s/1.jpg", user.getId()));
+            Image image = new Image(file.toURI().toString());
+            photoView.setImage(image);
         }
     }
 
@@ -107,10 +128,11 @@ public class UsersManagementView implements Initializable {
         user.setLastName(lastNameField.getText());
         user.setAccess(statusCheckBox.isSelected());
         user.setDoor(departmentField.getText());
-        user.setId(Integer.parseInt(employeeIdField.getText()));
+        user.setId(Integer.parseInt(UserIdField.getText()));
         user.setRegistredDate((int) registredDate.getValue().toEpochDay());
         user.setSex(sexComboBox.getSelectionModel().getSelectedItem());
         metier.addUser(user);
+        generatePhotoFromInternet(user.getId());
         reloadTable();
     }
 
@@ -123,14 +145,39 @@ public class UsersManagementView implements Initializable {
     }
 
     @FXML
-    void onDeleteBtnClicked(ActionEvent event) {
+    void onDeleteBtnClicked(ActionEvent event) throws IOException {
+        if (!usersTable.getSelectionModel().getSelectedItems().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Attention!");
+            alert.setHeaderText("Suppression du User");
+            alert.setContentText("Êtes-vous sûr de vouloir supprimer cet Utilisateur ?");
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    User p = usersTable.getSelectionModel().getSelectedItem();
+                    metier.deleteUser(p.getId());
+                    deleteUserPohtos(p.getId());
+                    clearUserForm();
+                    reloadTable();
+                }
+            });
+        }
+
 
     }
 
     @FXML
     void onSaveBtnClicked(ActionEvent event) {
-        System.out.println(registredDate.getValue());
-        System.out.println(registredDate.getValue().toEpochDay());
+        if (!usersTable.getSelectionModel().getSelectedItems().isEmpty()) {
+            user.setId(Integer.parseInt(UserIdField.getText()));
+            user.setFirstName(firstNameField.getText());
+            user.setLastName(lastNameField.getText());
+            user.setAccess(statusCheckBox.isSelected());
+            user.setDoor(departmentField.getText());
+            user.setRegistredDate((int) registredDate.getValue().toEpochDay());
+            user.setSex(sexComboBox.getSelectionModel().getSelectedItem());
+            metier.updateUser(user);
+            reloadTable();
+        }
     }
 
 
@@ -150,9 +197,6 @@ public class UsersManagementView implements Initializable {
         sexComboBox.getItems().removeAll(sexComboBox.getItems());
         sexComboBox.getItems().addAll("", "Male", "Female");
         sexComboBox.getSelectionModel().select("");
-
-        System.out.println(LocalDate.now().toEpochDay());
-        System.out.println(LocalDate.ofEpochDay(LocalDate.now().toEpochDay()));
 
     }
 
@@ -176,6 +220,54 @@ public class UsersManagementView implements Initializable {
         // Print the list of users
         for (User user : users) {
             metier.addUser(user);
+        }
+
+        List<User> u = metier.getAllUsers();
+        for (User user : u) {
+            generatePhotoFromInternet(user.getId());
+        }
+    }
+
+    private void deleteUserPohtos(Integer userId) {
+        Path sourceDir = Paths.get("photos/active/%s".formatted(userId.toString()));  // Source folder path
+        Path targetDir = Paths.get("photos/deleted/%s".formatted(userId.toString()));  // Target folder path
+
+        try {
+            // Create target directory if it does not exist
+            if (!Files.exists(targetDir)) {
+                Files.createDirectories(targetDir);
+            }
+
+            // Move the folder and its contents
+            Files.move(sourceDir, targetDir.resolve(sourceDir.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+
+            System.out.println("Folder moved successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void generatePhotoFromInternet(Integer userId) {
+        String imageUrl = "https://randomuser.me/api/portraits/men/%d.jpg".formatted(new Random().nextInt(100));
+        String savePath = "photos/active/%s/1.jpg".formatted(userId.toString());
+
+        try {
+            // Create directories if they don't exist
+            Path saveDir = Paths.get(savePath).getParent();
+            if (saveDir != null && !Files.exists(saveDir)) {
+                Files.createDirectories(saveDir);
+            }
+
+            // Open connection to the URL and get input stream
+            URL url = new URL(imageUrl);
+            try (InputStream inputStream = url.openStream()) {
+                // Save the file
+                Path targetPath = Paths.get(savePath);
+                Files.copy(inputStream, targetPath);
+                System.out.println("Image downloaded successfully to " + savePath);
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to download image: " + e.getMessage());
         }
     }
 }

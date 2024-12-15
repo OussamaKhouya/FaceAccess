@@ -31,7 +31,10 @@
                 </columns>
             </TableView>
         </VBox>
-      <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#onLoadBtnClicked" prefHeight="25.0" prefWidth="36.0" text="&gt;" />
+      <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#onLoadBtnClicked" prefHeight="25.0" prefWidth="36.0">
+         <graphic>
+            <FontAwesomeIconView glyphName="CHEVRON_CIRCLE_RIGHT" />
+         </graphic></Button>
 
         <!-- Form Section (Right Pane) -->
         <VBox prefHeight="580" prefWidth="653.0" spacing="15">
@@ -58,49 +61,77 @@
                 <Tab closable="false" text="General">
                     <AnchorPane>
                         <!-- Basic Info Section -->
-                        <VBox layoutX="10" layoutY="10" spacing="10">
+                        <VBox layoutX="10" layoutY="10" prefHeight="259.0" prefWidth="282.0" spacing="10">
                             <!-- Row 1 -->
                             <HBox spacing="20">
-                                <Label text="Status:" />
+                                <Label prefWidth="88.0" text="Status:" />
                                 <CheckBox fx:id="statusCheckBox" />
                             </HBox>
                             <!-- Row 2 -->
                             <HBox spacing="20">
-                                <Label text="Employee ID:" />
-                                <TextField fx:id="employeeIdField" prefWidth="150" />
+                                <Label prefWidth="88.0" text="Resident ID:" />
+                                <TextField fx:id="UserIdField" prefWidth="150" />
                             </HBox>
                             <HBox spacing="20">
-                                <Label text="First Name:" />
+                                <Label prefWidth="88.0" text="First Name:" />
                                 <TextField fx:id="firstNameField" prefWidth="150" />
                             </HBox>
                             <HBox spacing="20">
-                                <Label text="Last Name:" />
+                                <Label prefWidth="88.0" text="Last Name:" />
                                 <TextField fx:id="lastNameField" prefWidth="150" />
                             </HBox>
                             <HBox spacing="20">
-                                <Label text="Apartment" />
+                                <Label prefWidth="88.0" text="Door" />
                                 <TextField fx:id="departmentField" prefWidth="150" />
                             </HBox>
                             <HBox spacing="20">
-                                <Label text="Registred Date:" />
+                                <Label prefWidth="88.0" text="Registred Date:" />
                         <DatePicker fx:id="registredDate" />
                             </HBox>
                             <HBox spacing="20">
-                                <Label text="Sex" />
+                                <Label prefWidth="88.0" text="Sex" />
                                 <ComboBox fx:id="sexComboBox" prefWidth="150" />
                             </HBox>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
                         </VBox>
 
                         <!-- Photo Section -->
-                        <VBox alignment="CENTER" layoutX="400" layoutY="20" spacing="10">
-                     <Label text="Photo Size" />
-                     <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-border-width: 1px; -fx-border-color: darkblue;">
+                        <VBox alignment="CENTER" layoutX="349.0" layoutY="20" prefHeight="229.0" prefWidth="292.0" spacing="10">
+                     <Label text="Photo Size            " />
+                     <HBox prefHeight="100.0" prefWidth="200.0">
                         <children>
-                                  <ImageView fx:id="photoView" fitHeight="200.0" fitWidth="200.0" />
+                           <HBox style="-fx-border-width: 1px; -fx-border-color: darkblue;">
+                              <children>
+                                        <ImageView fx:id="photoView" fitHeight="220.0" fitWidth="220.0" />
+                              </children>
+                           </HBox>
+                           <VBox alignment="CENTER">
+                              <children>
+                                        <Button fx:id="uploadPhotoBtn">
+                                    <graphic>
+                                       <FontAwesomeIconView glyphName="CAMERA" />
+                                    </graphic>
+                                    <VBox.margin>
+                                       <Insets bottom="5.0" />
+                                    </VBox.margin>
+                                 </Button>
+                                 <Button fx:id="uploadPhotoBtn1">
+                                    <graphic>
+                                       <FontAwesomeIconView glyphName="TRASH_ALT" />
+                                    </graphic>
+                                 </Button>
+                              </children>
+                              <opaqueInsets>
+                                 <Insets />
+                              </opaqueInsets>
+                              <HBox.margin>
+                                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              </HBox.margin>
+                           </VBox>
                         </children>
                      </HBox>
-                            <Button fx:id="uploadPhotoBtn" text="Capture" />
-                     <Button fx:id="uploadPhotoBtn1" text="Clear" />
                         </VBox>
                   <padding>
                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
