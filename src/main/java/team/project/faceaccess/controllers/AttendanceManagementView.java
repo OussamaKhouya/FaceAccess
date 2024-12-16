@@ -1,4 +1,4 @@
-package team.project.faceaccess.presentation;
+package team.project.faceaccess.controllers;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;

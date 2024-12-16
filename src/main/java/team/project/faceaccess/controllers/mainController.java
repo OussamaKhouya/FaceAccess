@@ -1,4 +1,4 @@
-package team.project.faceaccess.controller;
+package team.project.faceaccess.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

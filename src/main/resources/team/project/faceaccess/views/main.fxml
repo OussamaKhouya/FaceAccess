@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="762.0" prefWidth="916.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controller.mainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="762.0" prefWidth="916.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.mainController">
    <children>
       <BorderPane prefHeight="581.0" prefWidth="792.0">
          <top>
@@ -16,7 +16,7 @@
                <children>
                   <ImageView fitHeight="63.0" fitWidth="206.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../assets/logo.png" />
+                        <Image url="@../images/logo.png" />
                      </image>
                   </ImageView>
                   <Button fx:id="CloseButton" layoutX="880.0" layoutY="11.0" minHeight="20.0" minWidth="30.0" mnemonicParsing="false" onAction="#closeLogin" prefHeight="39.0" prefWidth="35.0" styleClass="circle-button" text="X">

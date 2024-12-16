@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controller.RegisterController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.RegisterController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <top>
@@ -21,7 +21,7 @@
                <children>
                   <ImageView fitHeight="79.0" fitWidth="205.0" layoutX="97.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../assets/logo.png" />
+                        <Image url="@../images/logo.png" />
                      </image>
                   </ImageView>
                   <Button fx:id="CloseButton" layoutX="363.0" layoutY="7.0" minHeight="20.0" minWidth="30.0" mnemonicParsing="false" onAction="#closeRegister" prefHeight="39.0" prefWidth="35.0" styleClass="circle-button" text="X">

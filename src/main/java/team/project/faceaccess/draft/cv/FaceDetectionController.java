@@ -23,7 +23,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * The controller associated with the only view of our application. The
+ * The controller associated with the only views of our application. The
  * application logic is implemented here. It handles the button for
  * starting/stopping the camera, the acquired video stream, the relative
  * controls and the face detection/tracking.

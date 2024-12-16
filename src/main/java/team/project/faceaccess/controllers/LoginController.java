@@ -1,4 +1,4 @@
-package team.project.faceaccess.controller;
+package team.project.faceaccess.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +15,6 @@ import team.project.faceaccess.metier.IMetierImp;
 import team.project.faceaccess.models.Admin;
 
 import java.io.IOException;
-import java.sql.Connection;
 
 
 public class LoginController {

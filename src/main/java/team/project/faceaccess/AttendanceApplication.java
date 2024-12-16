@@ -10,7 +10,7 @@ import java.io.IOException;
 public class AttendanceApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        // Load the attendance FXML view
+        // Load the attendance FXML views
         FXMLLoader fxmlLoader = new FXMLLoader(AttendanceApplication.class.getResource("views/attendance.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
