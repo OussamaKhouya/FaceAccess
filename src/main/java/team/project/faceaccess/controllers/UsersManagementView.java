@@ -5,14 +5,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import team.project.faceaccess.HelloApplication;
 import team.project.faceaccess.metier.IMetier;
 import team.project.faceaccess.metier.IMetierImp;
 import team.project.faceaccess.models.User;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -269,5 +275,15 @@ public class UsersManagementView implements Initializable {
         } catch (IOException e) {
             System.err.println("Failed to download image: " + e.getMessage());
         }
+    }
+
+    public void uploadPhotoBtnOnClick(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("views/capture-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.show();
+
     }
 }
