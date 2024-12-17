@@ -13,10 +13,10 @@
    <children>
       <HBox prefHeight="400.0" prefWidth="145.0">
          <children>
-            <TreeView fx:id="roomTree" />
+            <TreeView fx:id="roomTree" prefHeight="400.0" prefWidth="159.0" />
          </children>
       </HBox>
-      <TableView fx:id="logTable" layoutX="142.0" layoutY="60.0" prefHeight="339.0" prefWidth="458.0">
+      <TableView fx:id="logTable" layoutX="166.0" layoutY="64.0" prefHeight="335.0" prefWidth="434.0">
          <columns>
             <TableColumn fx:id="logIdColumn" prefWidth="75.0" text="Log id" />
             <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="first name" />
@@ -29,5 +29,6 @@
       <Text layoutX="178.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="from" textAlignment="CENTER" wrappingWidth="101.875" />
       <Text layoutX="300.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" textAlignment="CENTER" wrappingWidth="101.875" />
       <DatePicker fx:id="toDatePicker" layoutX="300.0" layoutY="26.0" prefHeight="16.0" prefWidth="115.0" />
+      <Button layoutX="507.0" layoutY="26.0" mnemonicParsing="false" onAction="#exportReport" text="Export Report" />
    </children>
 </AnchorPane>

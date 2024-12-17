@@ -307,7 +307,4 @@ public class IMetierImp implements IMetier{
         return users;
     }
 
-
-
-
 }

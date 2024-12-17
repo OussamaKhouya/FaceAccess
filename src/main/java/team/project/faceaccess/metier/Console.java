@@ -10,7 +10,7 @@ import java.util.List;
 public class Console {
     public static void main(String[] args) throws SQLException {
         IMetierImp metier = new IMetierImp();
-/*
+
         // Add a new log
         User testUser = metier.fetchUserById(18);
         User testUser2 = metier.fetchUserById(19);
@@ -53,7 +53,7 @@ public class Console {
         for (AccessLog log : logs) {
             System.out.println(log);
         }
-*/
+
         // List of test doors
         String[] testDoors = {"D404", "C303", "E505", "F606", "G707", "H808", "I909", "J010"};
         List<User>users;
