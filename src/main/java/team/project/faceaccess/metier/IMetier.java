@@ -1,12 +1,12 @@
 package team.project.faceaccess.metier;
 
-import lombok.extern.java.Log;
 import team.project.faceaccess.models.AccessLog;
 import team.project.faceaccess.models.Admin;
 import team.project.faceaccess.models.User;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 
 public interface IMetier {
@@ -19,6 +19,8 @@ public interface IMetier {
     Admin getAdmin();
     void updateUser(User user);
     void generateRaport(User user);
+    int getTotalUsers(String duration, boolean hasAccess);
+    Map<String, Integer> getTotalVisits(boolean hasAccess);
     void manageAccess(User user);
     void viewStatistics(User user);
     void viewGeneralStatistics();

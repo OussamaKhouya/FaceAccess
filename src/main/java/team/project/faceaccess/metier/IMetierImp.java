@@ -1,18 +1,21 @@
 package team.project.faceaccess.metier;
 
+import team.project.faceaccess.utils.Constants;
+import team.project.faceaccess.utils.Helpers;
 import team.project.faceaccess.models.AccessLog;
 import team.project.faceaccess.models.Admin;
 import team.project.faceaccess.models.User;
 import team.project.faceaccess.singleton.SingletonConnexionDB;
 
-import java.io.File;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class IMetierImp implements IMetier{
+public class IMetierImp implements IMetier {
     // get all the users (action by the Admin)
     @Override
     public List<User> getAllUsers() {
@@ -130,7 +133,7 @@ public class IMetierImp implements IMetier{
                 admin.setPassword(resultSet.getString("password"));
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return admin;
@@ -181,6 +184,74 @@ public class IMetierImp implements IMetier{
 
     }
 
+    public int getTotalUsers(String duration, boolean hasAccess) {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        int residents = 0;
+        String accessGranted = hasAccess ? "1" : "0";
+        String timestamp;
+        if (duration.equals(Constants.DURATION_DAY)) {
+            timestamp = Helpers.getDateTimeatStartOfDay();
+        } else if (duration.equals(Constants.DURATION_WEEK)) {
+            timestamp = Helpers.getDateTimeAtStartOfWeek();
+        } else {
+            timestamp = Helpers.getDateTimeatStartOfMonth();
+        }
+        String query = "";
+        try {
+
+            query = "select count(*) from AccessLog where accessGranted = ? and timestamp > ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, accessGranted);
+            preparedStatement.setString(2, timestamp);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            System.out.println(query);
+            System.out.println(timestamp);
+            while (resultSet.next()) {
+                residents = resultSet.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // One record in Users tables is reserved for unknown users
+        return residents ;
+    }
+
+
+    public Map<String, Integer> getTotalVisits(boolean hasAccess) {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        String accessGranted = hasAccess ? "1" : "0";
+        String query = "";
+        Map<String, Integer> accessCounts = new HashMap<>();
+        try {
+            query = "SELECT\n" +
+                    "    SUM(CASE WHEN timestamp >= DATE('now') THEN 1 ELSE 0 END) AS today,\n" +
+                    "    SUM(CASE WHEN timestamp >= DATE('now', '-1 day') AND timestamp < DATE('now') THEN 1 ELSE 0 END) AS today1,\n" +
+                    "    SUM(CASE WHEN timestamp >= DATE('now', '-2 day') AND timestamp < DATE('now', '-1 days') THEN 1 ELSE 0 END) AS today2,\n" +
+                    "    SUM(CASE WHEN timestamp >= DATE('now', '-3 days') AND timestamp < DATE('now', '-2 days') THEN 1 ELSE 0 END) AS today3,\n" +
+                    "    SUM(CASE WHEN timestamp >= DATE('now', '-4 days') AND timestamp < DATE('now', '-3 days') THEN 1 ELSE 0 END) AS today4,\n" +
+                    "    SUM(CASE WHEN timestamp >= DATE('now', '-5 days') AND timestamp < DATE('now', '-4 days') THEN 1 ELSE 0 END) AS today5,\n" +
+                    "    SUM(CASE WHEN timestamp >= DATE('now', '-6 days') AND timestamp < DATE('now', '-5 days') THEN 1 ELSE 0 END) AS today6\n" +
+                    "FROM AccessLog\n" +
+                    "WHERE accessGranted = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, accessGranted);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                accessCounts.put("today", rs.getInt("today"));
+                accessCounts.put("today1", rs.getInt("today1"));
+                accessCounts.put("today2", rs.getInt("today2"));
+                accessCounts.put("today3", rs.getInt("today3"));
+                accessCounts.put("today4", rs.getInt("today4"));
+                accessCounts.put("today5", rs.getInt("today5"));
+                accessCounts.put("today6", rs.getInt("today6"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // One record in Users tables is reserved for unknown users
+        return accessCounts;
+    }
+
     @Override
     public void addLog(AccessLog log) {
         Connection connection = SingletonConnexionDB.getConnexion();
@@ -191,7 +262,7 @@ public class IMetierImp implements IMetier{
 
             // Get current timestamp and format it
             LocalDateTime now = LocalDateTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constants.DATETIME_PATTERN);
             String formattedTimestamp = now.format(formatter);
 
             pstmt.setString(2, formattedTimestamp); // Use the formatted current timestamp
@@ -232,7 +303,7 @@ public class IMetierImp implements IMetier{
                 // Fetch the User by ID
                 log.setUser(fetchUserById(rs.getInt("userId")));
 
-                log.setTimestamp(LocalDateTime.parse(rs.getString("timestamp"), DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")));
+                log.setTimestamp(LocalDateTime.parse(rs.getString("timestamp"), DateTimeFormatter.ofPattern(Constants.DATETIME_PATTERN)));
                 log.setAccessGranted(rs.getBoolean("accessGranted"));
                 logs.add(log);
             }
@@ -276,8 +347,8 @@ public class IMetierImp implements IMetier{
         PreparedStatement statement = connection.prepareStatement(query);
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
-                doors.add(resultSet.getString("door"));
-            }
+            doors.add(resultSet.getString("door"));
+        }
 
 
         return doors;
@@ -293,21 +364,19 @@ public class IMetierImp implements IMetier{
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
             User user = new User(
-                            resultSet.getInt("id"),
-                            resultSet.getString("firstName"),
-                            resultSet.getString("lastName"),
-                            resultSet.getBoolean("access"),
-                            resultSet.getString("door"),
-                            resultSet.getInt("registredDate"),
-                            resultSet.getString("sex")
-                    );
-                    users.add(user);
-                }
+                    resultSet.getInt("id"),
+                    resultSet.getString("firstName"),
+                    resultSet.getString("lastName"),
+                    resultSet.getBoolean("access"),
+                    resultSet.getString("door"),
+                    resultSet.getInt("registredDate"),
+                    resultSet.getString("sex")
+            );
+            users.add(user);
+        }
 
         return users;
     }
-
-
 
 
 }

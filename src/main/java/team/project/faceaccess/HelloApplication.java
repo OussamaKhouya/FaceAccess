@@ -19,31 +19,31 @@ import java.sql.ResultSet;
 public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        IMetier metier =new IMetierImp();
+        IMetier metier = new IMetierImp();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("views/welcom-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 399, 315);
         stage.setScene(scene);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
 
-        Stage loginOrRegisterStage =new Stage();
+        Stage loginOrRegisterStage = new Stage();
         Connection connection = SingletonConnexionDB.getConnexion();
-        int nAdmin=0;
-        try{
+        int nAdmin = 0;
+        try {
             String query = "select count(*) from Admin";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                nAdmin= rs.getInt(1);
+                nAdmin = rs.getInt(1);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         FXMLLoader loginLoader;
-        if(nAdmin==0){
+        if (nAdmin == 0) {
             loginLoader = new FXMLLoader(HelloApplication.class.getResource("views/register-view.fxml"));
             loginOrRegisterStage.setTitle("Register");
-        }else{
+        } else {
             loginLoader = new FXMLLoader(HelloApplication.class.getResource("views/login.fxml"));
             loginOrRegisterStage.setTitle("Login");
         }

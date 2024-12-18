@@ -1,15 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="536.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.ReportController">
    <children>
-      <Label layoutX="7.0" layoutY="50.0" text="report">
-         <font>
-            <Font size="68.0" />
-         </font>
-      </Label>
+      <PieChart fx:id="pieChart" layoutX="36.0" layoutY="90.0" prefHeight="370.0" prefWidth="426.0" />
+      <Button fx:id="pieChartMBtn" layoutX="164.0" layoutY="118.0" mnemonicParsing="false" onAction="#onPieChartMBtnClicked" text="Month" />
+      <Button fx:id="pieChartWBtn" layoutX="226.0" layoutY="118.0" mnemonicParsing="false" onAction="#onPieChartWBtnClicked" text="Week" />
+      <Button fx:id="pieChartDBtn" layoutX="285.0" layoutY="118.0" mnemonicParsing="false" onAction="#onPieChartDBtnClicked" text="Today" />
+      <BarChart fx:id="barChart" layoutX="462.0" layoutY="90.0" prefHeight="370.0" prefWidth="392.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" fx:id="xAxis" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis fx:id="yAxis" label="Visits" side="LEFT" />
+        </yAxis>
+      </BarChart>
    </children>
 </AnchorPane>
