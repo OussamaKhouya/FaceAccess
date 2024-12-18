@@ -109,7 +109,7 @@
                            </HBox>
                            <VBox alignment="CENTER">
                               <children>
-                                        <Button fx:id="uploadPhotoBtn">
+                                        <Button fx:id="uploadPhotoBtn" onAction="#uploadPhotoBtnOnClick">
                                     <graphic>
                                        <FontAwesomeIconView glyphName="CAMERA" />
                                     </graphic>

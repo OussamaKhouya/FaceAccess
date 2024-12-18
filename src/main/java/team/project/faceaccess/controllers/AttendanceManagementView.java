@@ -1,5 +1,19 @@
 package team.project.faceaccess.controllers;
 
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import javafx.stage.FileChooser;
+import javafx.scene.control.Alert;
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,6 +35,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class AttendanceManagementView implements Initializable {
 
@@ -78,8 +95,17 @@ public class AttendanceManagementView implements Initializable {
         loadRoomTree();
 
         // Add listeners to the DatePickers
+        /*
         fromDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filterLogsByDateRange());
         toDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filterLogsByDateRange());
+         */
+        // Add listeners to the DatePickers
+        fromDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filterLogs());
+        toDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> filterLogs());
+
+        // Add a listener to the root of the checkbox tree
+        CheckBoxTreeItem<String> root = (CheckBoxTreeItem<String>) roomTree.getRoot();
+        root.addEventHandler(CheckBoxTreeItem.checkBoxSelectionChangedEvent(), event -> filterLogs());
     }
 
     private void loadLogs() {
@@ -111,7 +137,7 @@ public class AttendanceManagementView implements Initializable {
                 doorItem.setSelected(true);
                 // Add listener to doorItem
                 doorItem.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                    filterLogsBasedOnSelection();
+                    filterLogs();
                 });
 
 
@@ -129,7 +155,7 @@ public class AttendanceManagementView implements Initializable {
 
                             // Add listener to userItem
                             userItem.selectedProperty().addListener((observable, oldValue, newValue) -> {
-                                filterLogsBasedOnSelection();
+                                filterLogs();
                             });
 
                             doorItem.getChildren().add(userItem);
@@ -189,6 +215,7 @@ public class AttendanceManagementView implements Initializable {
 
 
     // Method to Filter and Update Logs
+    /*
     private void filterLogsBasedOnSelection() {
         // Get the root node of the TreeView
         CheckBoxTreeItem<String> root = (CheckBoxTreeItem<String>) roomTree.getRoot();
@@ -211,7 +238,9 @@ public class AttendanceManagementView implements Initializable {
         logTable.setItems(filteredLogs);
     }
 
+     */
 
+    /*
     private void filterLogsByDateRange() {
         LocalDate fromDate = fromDatePicker.getValue();
         LocalDate toDate = toDatePicker.getValue();
@@ -236,6 +265,120 @@ public class AttendanceManagementView implements Initializable {
 
         logTable.setItems(filteredLogs);
     }
+
+
+     */
+
+    private void filterLogs() {
+        LocalDate fromDate = fromDatePicker.getValue();
+        LocalDate toDate = toDatePicker.getValue();
+
+        // Get selected users from the tree
+        CheckBoxTreeItem<String> root = (CheckBoxTreeItem<String>) roomTree.getRoot();
+        List<String> selectedUsers = getSelectedUsers(root);
+
+        ObservableList<AccessLog> filteredLogs = logs.filtered(log -> {
+            // Filter by selected users
+            String userFullName = log.getUser().getFirstName() + " " + log.getUser().getLastName();
+            boolean matchesUserFilter = selectedUsers.isEmpty() || selectedUsers.contains(userFullName);
+
+            // Filter by date range
+            boolean matchesDateFilter = true;
+            if (fromDate != null || toDate != null) {
+                LocalDate logDate = log.getTimestamp().toLocalDate();
+                if (fromDate != null && logDate.isBefore(fromDate)) {
+                    matchesDateFilter = false;
+                }
+                if (toDate != null && logDate.isAfter(toDate)) {
+                    matchesDateFilter = false;
+                }
+            }
+
+            return matchesUserFilter && matchesDateFilter;
+        });
+
+        // Update the TableView
+        logTable.setItems(filteredLogs);
+    }
+
+    @FXML
+    private void exportReport() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save PDF Report");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+
+        // Let the user choose a file to save
+        java.io.File file = fileChooser.showSaveDialog(logTable.getScene().getWindow());
+        if (file != null) {
+            Document document = new Document();
+            try {
+                // Initialize PdfWriter with the chosen file path
+                PdfWriter.getInstance(document, new FileOutputStream(file));
+                document.open();
+
+                // Add a title to the document
+                Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+                Paragraph title = new Paragraph("Access Logs Report", titleFont);
+                title.setAlignment(Element.ALIGN_CENTER);
+                document.add(title);
+                document.add(new Paragraph("\n")); // Add spacing
+
+                // Create a table for the logs
+                PdfPTable table = new PdfPTable(5); // Five columns: ID, First Name, Last Name, Date, Access Granted
+                table.setWidthPercentage(100); // Full width of the page
+                table.setSpacingBefore(10f);
+                table.setSpacingAfter(10f);
+
+                // Add table headers
+                Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+                table.addCell(new PdfPCell(new Phrase("ID", headerFont)));
+                table.addCell(new PdfPCell(new Phrase("First Name", headerFont)));
+                table.addCell(new PdfPCell(new Phrase("Last Name", headerFont)));
+                table.addCell(new PdfPCell(new Phrase("Date", headerFont)));
+                table.addCell(new PdfPCell(new Phrase("Access Granted", headerFont)));
+
+                // Add logs to the table
+                for (AccessLog log : logTable.getItems()) {
+                    table.addCell(String.valueOf(log.getId()));
+                    table.addCell(log.getUser().getFirstName());
+                    table.addCell(log.getUser().getLastName());
+                    table.addCell(log.getTimestamp().toString());
+                    table.addCell(log.isAccessGranted() ? "Yes" : "No");
+                }
+
+                document.add(table);
+
+                // Add a footer or additional information if needed
+                document.add(new Paragraph("Generated on: " + java.time.LocalDate.now()));
+
+                // Show success alert
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Report Exported");
+                successAlert.setHeaderText(null);
+                successAlert.setContentText("The report has been successfully exported.");
+                successAlert.showAndWait();
+
+            } catch (DocumentException | IOException e) {
+                e.printStackTrace();
+                // Show error alert
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Export Error");
+                errorAlert.setHeaderText(null);
+                errorAlert.setContentText("An error occurred while exporting the report.");
+                errorAlert.showAndWait();
+            } finally {
+                document.close();
+            }
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 }
