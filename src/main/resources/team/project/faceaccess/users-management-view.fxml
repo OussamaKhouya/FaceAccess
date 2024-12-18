@@ -117,9 +117,9 @@
                                        <Insets bottom="5.0" />
                                     </VBox.margin>
                                  </Button>
-                                 <Button fx:id="uploadPhotoBtn1">
+                                 <Button fx:id="deletPhotoBtn1" onAction="#deleteUserPohtos">
                                     <graphic>
-                                       <FontAwesomeIconView glyphName="TRASH_ALT" />
+                                       <FontAwesomeIconView glyphName="TRASH_ALT" text="" />
                                     </graphic>
                                  </Button>
                               </children>

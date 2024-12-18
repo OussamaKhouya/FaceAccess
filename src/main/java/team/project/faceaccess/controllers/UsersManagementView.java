@@ -1,8 +1,10 @@
 package team.project.faceaccess.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,12 +16,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.Java2DFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameGrabber;
 import team.project.faceaccess.HelloApplication;
 import team.project.faceaccess.metier.IMetier;
 import team.project.faceaccess.metier.IMetierImp;
 import team.project.faceaccess.models.User;
 
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,10 +35,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class UsersManagementView implements Initializable {
 
@@ -92,7 +96,7 @@ public class UsersManagementView implements Initializable {
     @FXML
     private Button uploadPhotoBtn;
     @FXML
-    private Button updateBtn;
+    public Button updateBtn;
     @FXML
     private ComboBox<String> sexComboBox;
 
@@ -122,7 +126,7 @@ public class UsersManagementView implements Initializable {
             registredDate.setValue(LocalDate.ofEpochDay(user.getRegistredDate()));
             sexComboBox.getSelectionModel().select(user.getSex());
             System.out.println(user);
-            File file = new File(String.format("photos/active/%s/1.jpg", user.getId()));
+            File file = new File(String.format("photos/active/%s/1.png", user.getId()));
             Image image = new Image(file.toURI().toString());
             photoView.setImage(image);
         }
@@ -235,18 +239,26 @@ public class UsersManagementView implements Initializable {
     }
 
     private void deleteUserPohtos(Integer userId) {
-        Path sourceDir = Paths.get("photos/active/%s".formatted(userId.toString()));  // Source folder path
-        Path targetDir = Paths.get("photos/deleted/%s".formatted(userId.toString()));  // Target folder path
+        Path sourceDir = Paths.get("photos/active/%s/1.png".formatted(userId.toString()));  // Source folder path
+        String targetDir = "photos/deleted/%s/1.png".formatted(userId.toString());  // Target folder path
 
         try {
             // Create target directory if it does not exist
-            if (!Files.exists(targetDir)) {
-                Files.createDirectories(targetDir);
+            Path saveDir = Paths.get(targetDir).getParent();
+            if (!Files.exists(saveDir)) {
+                Files.createDirectories(saveDir);
             }
 
             // Move the folder and its contents
-            Files.move(sourceDir, targetDir.resolve(sourceDir.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(sourceDir, saveDir.resolve(sourceDir.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+            Path dir = Paths.get("photos/active/%s".formatted(userId.toString()));
 
+            try {
+                Files.delete(dir); // Deletes the directory if it's empty
+                System.out.println("Directory deleted successfully.");
+            } catch (IOException e) {
+                System.err.println("Error deleting directory: " + e.getMessage());
+            }
             System.out.println("Folder moved successfully!");
         } catch (IOException e) {
             e.printStackTrace();
@@ -255,7 +267,7 @@ public class UsersManagementView implements Initializable {
 
     private static void generatePhotoFromInternet(Integer userId) {
         String imageUrl = "https://randomuser.me/api/portraits/men/%d.jpg".formatted(new Random().nextInt(100));
-        String savePath = "photos/active/%s/1.jpg".formatted(userId.toString());
+        String savePath = "photos/active/%s/1.png".formatted(userId.toString());
 
         try {
             // Create directories if they don't exist
@@ -277,13 +289,69 @@ public class UsersManagementView implements Initializable {
         }
     }
 
+//    private OpenCVFrameGrabber grabber;
+//    private volatile boolean isRunning = true;
+//    private void startCamera() {
+//        CaptureController controller=new CaptureController();
+//        grabber = new OpenCVFrameGrabber(0); // Open default webcam
+//        new Thread(() -> {
+//            try {
+//                grabber.start();
+//                Java2DFrameConverter converter = new Java2DFrameConverter();
+//
+//                while (isRunning) {
+//                    Frame frame = grabber.grab(); // Capture a frame
+//                    if (frame != null) {
+//                        BufferedImage bufferedImage = converter.convert(frame);
+//                        if (bufferedImage != null) {
+//                            Platform.runLater(() -> {
+//                                Image image = SwingFXUtils.toFXImage(bufferedImage, null);
+//                                controller.getImageView().setImage(image);
+//                            });
+//                        }
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }).start();
+//    }
     public void uploadPhotoBtnOnClick(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("views/capture-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.initStyle(StageStyle.UNDECORATED);
-        stage.show();
 
+            if (!usersTable.getSelectionModel().getSelectedItems().isEmpty()){
+                FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("views/capture-view.fxml"));
+                Scene scene = new Scene(fxmlLoader.load());
+                Stage stage = new Stage();
+                CaptureController controller =fxmlLoader.getController();
+                controller.setUser(user);
+                controller.setParentController(this);
+                stage.setScene(scene);
+                stage.initStyle(StageStyle.UNDECORATED);
+                stage.show();
+            }else {
+                Alert alert =new Alert(Alert.AlertType.ERROR,"select an user first",ButtonType.OK);
+                alert.show();
+            }
+
+    }
+
+
+
+    public void deleteUserPohtos(ActionEvent actionEvent) {
+        Alert alert =new Alert(Alert.AlertType.CONFIRMATION,"are you sure uou want to delete the photo ?",ButtonType.YES,ButtonType.NO);
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // Check which button the user clicked
+        if (result.isPresent()) {
+            if (result.get() == ButtonType.YES) {
+                System.out.println("OK button clicked.");
+                deleteUserPohtos(user.getId());
+                updateBtn.fire();
+            } else if (result.get() == ButtonType.NO) {
+                System.out.println("Cancel button clicked.");
+            }
+        } else {
+            System.out.println("No button was clicked (Alert was closed).");
+        }
     }
 }

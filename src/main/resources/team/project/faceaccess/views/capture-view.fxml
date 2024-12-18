@@ -16,15 +16,15 @@
             <Button fx:id="disconnectButton" layoutX="432.0" layoutY="13.0" mnemonicParsing="false" onAction="#disconnectButtonOnClick" prefHeight="25.0" prefWidth="140.0" styleClass="loginButton" text="Disconnect" />
             <AnchorPane layoutX="14.0" layoutY="55.0" prefHeight="200.0" prefWidth="256.0" style="-fx-border-color: black;">
                <children>
-                  <ImageView fitHeight="200.0" fitWidth="256.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="256.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="323.0" layoutY="55.0" prefHeight="200.0" prefWidth="256.0" style="-fx-border-color: black;">
                <children>
-                  <ImageView fitHeight="200.0" fitWidth="256.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="capturedImageView" fitHeight="200.0" fitWidth="256.0" layoutX="1.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
-            <Button fx:id="captureButton" layoutX="14.0" layoutY="277.0" mnemonicParsing="false" onAction="#captureButtonOnClick" prefHeight="25.0" prefWidth="149.0" styleClass="loginButton" text="Capture" />
+            <Button fx:id="captureButton" layoutX="14.0" layoutY="277.0" mnemonicParsing="false" onAction="#capturePhoto" prefHeight="25.0" prefWidth="149.0" styleClass="loginButton" text="Capture" />
             <Button fx:id="saveButton" layoutX="285.0" layoutY="277.0" mnemonicParsing="false" onAction="#saveButtonOnClick" prefHeight="25.0" prefWidth="140.0" styleClass="loginButton" text="Save" />
             <Button fx:id="cancelButton" layoutX="442.0" layoutY="277.0" mnemonicParsing="false" onAction="#closeCapture" prefHeight="25.0" prefWidth="140.0" styleClass="loginButton" text="Cancel" />
          </children>
