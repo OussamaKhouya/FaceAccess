@@ -1,21 +1,26 @@
 .loginButton {
-    -fx-background-color:  #40cd2f;
+    -fx-background-color:  #7ac143;
 }
 .loginButton:hover {
-    -fx-background-color: #606060;
+    -fx-background-color: #78bc27;
 }
 .circle-button {
-    -fx-background-color: #40cd2f; /* Button background color */
+    -fx-background-color: inherit; /* Button background color */
     -fx-text-fill: white;          /* Button text color */
     -fx-border-color:white;
     -fx-padding: 0; /* Remove default padding */
     -fx-shape: "M100,50a50,50 0 1,1 0.1,0z"; /* Circular shape */
 }
 .circle-button:hover {
-    -fx-border-color:#606060;
-    -fx-text-fill: #606060;
+    -fx-border-color:#111;
+    -fx-text-fill: #111;
 }
 
 .topButtons:hover {
-    -fx-background-color: #d5d1d1;
+    -fx-background-color: #78bc27;
+}
+
+.wallpaper {
+    --fx-background-image: url("../images/wallpaper1.jpg");
+
 }

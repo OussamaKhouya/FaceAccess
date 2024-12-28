@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="728.0" prefWidth="1024.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.HomeController">
+   <BorderPane prefHeight="728.0" prefWidth="1024.0">
+      <center>
+         <TabPane fx:id="tabPane" prefHeight="407.0" prefWidth="627.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <tabs>
+               <Tab fx:id="homeTab">
+                  <content>
+                     <VBox alignment="CENTER" prefHeight="675.0" prefWidth="1024.0" spacing="10.0" styleClass="wallpaper" stylesheets="@../css/style.css">
+                        <Label text="13:53">
+                           <font>
+                              <Font name="Roboto Black" size="48.0" />
+                           </font>
+                        </Label>
+                        <Label text=" Tuesday 2021-01-12   ">
+                           <font>
+                              <Font name="Roboto Black" size="18.0" />
+                           </font>
+                        </Label>
+                        <Label text="Welcome">
+                           <font>
+                              <Font name="Roboto Black" size="48.0" />
+                           </font>
+                        </Label>
+                        <HBox alignment="CENTER" spacing="200.0">
+                           <children>
+                              <Button onAction="#onCameraBtnClicked" styleClass="loginButton">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="CAMERA_RETRO" size="40" />
+                                 </graphic>
+                              </Button>
+                              <Button onAction="#onLockBtnClicked" styleClass="loginButton">
+                                 <graphic>
+              
+            </graphic>
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="LOCK" size="40" />
+                                 </graphic>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+                           </padding>
+                        </HBox>
+                     </VBox>
+                  </content>
+               </Tab>
+               <Tab fx:id="recognitionTab">
+                  <content>
+                     <AnchorPane>
+                        <children>
+                           <ImageView fx:id="imageView" fitHeight="278.0" fitWidth="306.0" layoutX="185.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" />
+                           <Label fx:id="recognitionResultlbl" layoutX="193.0" layoutY="320.0" prefHeight="20.0" prefWidth="290.0" textAlignment="CENTER">
+                              <font>
+                                 <Font size="14.0" />
+                              </font>
+                           </Label>
+                        </children>
+                     </AnchorPane>
+                  </content>
+               </Tab>
+            </tabs>
+         </TabPane>
+      </center>
+      <top>
+         <Pane prefHeight="58.0" prefWidth="1024.0" style="-fx-background-color: #7ac143;" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
+            <children>
+               <ImageView fitHeight="54.0" fitWidth="190.0" layoutX="5.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+                  <image>
+                     <Image url="@../images/logo.png" />
+                  </image>
+               </ImageView>
+               <Button fx:id="CloseButton" layoutX="980.0" layoutY="11.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#closeLogin" prefHeight="30.0" prefWidth="30.0" styleClass="circle-button" text="X">
+                  <font>
+                     <Font name="Roboto Light" size="18.0" />
+                  </font>
+               </Button>
+            </children>
+         </Pane>
+      </top>
+   </BorderPane>
+</AnchorPane>

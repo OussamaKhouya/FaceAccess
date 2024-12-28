@@ -30,4 +30,5 @@ public interface IMetier {
     User fetchUserById(int userId);
     List<String> getAllDoors() throws SQLException; // Fetches a list of all unique doors (rooms)
     List<User> getUsersByDoor(String door) throws SQLException; // Fetches users associated with a specific door
+    boolean isThereAnAdmin();
 }

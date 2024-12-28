@@ -19,4 +19,5 @@ public class User {
     private String door;
     private Integer registredDate;
     private String sex;
+    private boolean isAdmin = false;
 }

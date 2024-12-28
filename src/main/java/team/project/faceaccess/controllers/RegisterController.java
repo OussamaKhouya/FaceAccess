@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import team.project.faceaccess.HelloApplication;
+import team.project.faceaccess.StartApplication;
 import team.project.faceaccess.metier.IMetier;
 import team.project.faceaccess.metier.IMetierImp;
 import team.project.faceaccess.models.Admin;
@@ -55,7 +55,7 @@ public class RegisterController  {
                 admin.setPassword(password);
                 metier.addAdmin(admin);
                 Stage stage = new Stage();
-                FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("views/login.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("views/login-view.fxml"));
                 Scene scene = new Scene(fxmlLoader.load());
                 stage.setScene(scene);
                 stage.initStyle(StageStyle.UNDECORATED);

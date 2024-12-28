@@ -1,11 +1,10 @@
 package team.project.faceaccess.metier;
 
-import team.project.faceaccess.utils.Constants;
-import team.project.faceaccess.utils.Helpers;
 import team.project.faceaccess.models.AccessLog;
 import team.project.faceaccess.models.Admin;
 import team.project.faceaccess.models.User;
-import team.project.faceaccess.singleton.SingletonConnexionDB;
+import team.project.faceaccess.utils.Constants;
+import team.project.faceaccess.utils.Helpers;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -17,13 +16,13 @@ import java.util.Map;
 
 public class IMetierImp implements IMetier {
     // get all the users (action by the Admin)
+
     @Override
     public List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
         Connection connection = SingletonConnexionDB.getConnexion();
-
+        List<User> users = new ArrayList<>();
         try {
-            String query = "SELECT id, firstName, lastName, access, door, registredDate, sex FROM Users";
+            String query = "SELECT id, firstName, lastName, access, door, registredDate, sex, isAdmin FROM Users";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
@@ -35,6 +34,7 @@ public class IMetierImp implements IMetier {
                 user.setRegistredDate(resultSet.getInt("registredDate"));
                 user.setSex(resultSet.getString("sex"));
                 user.setAccess(resultSet.getBoolean("access"));
+                user.setAdmin(resultSet.getBoolean("isAdmin"));
                 users.add(user);
             }
 
@@ -142,7 +142,6 @@ public class IMetierImp implements IMetier {
     @Override
     public void updateUser(User user) {
         Connection connection = SingletonConnexionDB.getConnexion();
-
         try {
             //String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ? WHERE id = ?";
             String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ?, door = ?, registredDate = ?, sex = ? WHERE id = ?";
@@ -213,7 +212,7 @@ public class IMetierImp implements IMetier {
             e.printStackTrace();
         }
         // One record in Users tables is reserved for unknown users
-        return residents ;
+        return residents;
     }
 
 
@@ -341,9 +340,10 @@ public class IMetierImp implements IMetier {
 
     @Override
     public List<String> getAllDoors() throws SQLException {
-        List<String> doors = new ArrayList<>();
-        String query = "SELECT DISTINCT door FROM users";
         Connection connection = SingletonConnexionDB.getConnexion();
+        List<String> doors = new ArrayList<>();
+        String query = "SELECT DISTINCT door FROM Users";
+
         PreparedStatement statement = connection.prepareStatement(query);
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
@@ -356,9 +356,10 @@ public class IMetierImp implements IMetier {
 
     @Override
     public List<User> getUsersByDoor(String door) throws SQLException {
-        List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM users WHERE door = ?";
         Connection connection = SingletonConnexionDB.getConnexion();
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM Users WHERE door = ?";
+
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, door);
         ResultSet resultSet = statement.executeQuery();
@@ -370,12 +371,26 @@ public class IMetierImp implements IMetier {
                     resultSet.getBoolean("access"),
                     resultSet.getString("door"),
                     resultSet.getInt("registredDate"),
-                    resultSet.getString("sex")
+                    resultSet.getString("sex"),
+                    resultSet.getBoolean("isAdmin")
             );
             users.add(user);
         }
-
         return users;
+    }
+
+    @Override
+    public boolean isThereAnAdmin() {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        String query = "select count(*) from Admin";
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            ResultSet rs = preparedStatement.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
