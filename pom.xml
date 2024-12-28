@@ -61,13 +61,13 @@
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
+            <artifactId>javacv</artifactId>
             <version>1.5.11</version>
         </dependency>
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>javacv-platform</artifactId>
-            <version>1.5.8</version>
+            <artifactId>opencv-platform</artifactId>
+            <version>4.10.0-1.5.11</version>
         </dependency>
 
         <dependency>
@@ -75,6 +75,8 @@
             <artifactId>itextpdf</artifactId>
             <version>5.5.13.4</version>
         </dependency>
+
+
 
 
 
