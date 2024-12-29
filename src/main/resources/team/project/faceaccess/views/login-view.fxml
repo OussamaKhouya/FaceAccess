@@ -11,18 +11,18 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.LoginController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="244.0" prefWidth="399.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.LoginController">
    <children>
-      <BorderPane prefHeight="200.0" prefWidth="200.0">
+      <BorderPane prefHeight="287.0" prefWidth="399.0">
          <top>
-            <Pane prefHeight="88.0" prefWidth="399.0" style="-fx-background-color: #7ac143;" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
+            <Pane prefHeight="68.0" prefWidth="399.0" style="-fx-background-color: #7ac143;" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="79.0" fitWidth="205.0" layoutX="97.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="72.0" fitWidth="169.0" layoutX="115.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/logo.png" />
                      </image>
                   </ImageView>
-                  <Button fx:id="CloseButton" layoutX="363.0" layoutY="7.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#closeLogin" prefHeight="30.0" prefWidth="30.0" styleClass="circle-button" text="X">
+                  <Button fx:id="CloseButton" layoutX="368.0" layoutY="7.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#closeLogin" prefHeight="25.0" prefWidth="25.0" styleClass="circle-button" text="X">
                      <font>
                         <Font name="Roboto Light" size="18.0" />
                      </font>
@@ -31,11 +31,11 @@
             </Pane>
          </top>
          <center>
-            <Pane prefHeight="227.0" prefWidth="398.0" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
+            <Pane prefHeight="173.0" prefWidth="399.0" stylesheets="@../css/style.css" BorderPane.alignment="CENTER">
                <children>
                   <TextField fx:id="adminUserNameId" layoutX="111.0" layoutY="26.0" prefHeight="25.0" prefWidth="177.0" promptText="user name" text="admin" />
                   <PasswordField fx:id="adminPasswordId" layoutX="111.0" layoutY="69.0" prefHeight="25.0" prefWidth="177.0" promptText="password" text="123" />
-                  <Button id="loginButton" fx:id="loginButtonOn" layoutX="136.0" layoutY="150.0" mnemonicParsing="false" onAction="#loginButtonOnClick" prefHeight="33.0" prefWidth="127.0" styleClass="loginButton" text="Login" textFill="#f8f8f8">
+                  <Button id="loginButton" fx:id="loginButtonOn" layoutX="137.0" layoutY="129.0" mnemonicParsing="false" onAction="#loginButtonOnClick" prefHeight="25.0" prefWidth="125.0" styleClass="loginButton" text="Login" textFill="#f8f8f8">
                      <font>
                         <Font size="14.0" />
                      </font>

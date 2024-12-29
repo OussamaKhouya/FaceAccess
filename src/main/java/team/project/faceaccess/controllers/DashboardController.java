@@ -36,9 +36,9 @@ public class DashboardController {
 
     public void initialize() {
 
-        attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
+        attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
         reportButton.setBackground(new Background(new BackgroundFill(Color.web("#f7f4f4"), CornerRadii.EMPTY, null)));
-        personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
+        personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
     }
 
     @FXML
@@ -46,8 +46,8 @@ public class DashboardController {
         attendancePane.setVisible(true);
         personnelPane.setVisible(false);
         reportPane.setVisible(false);
-        reportButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
-        personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
+        reportButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
+        personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
     }
 
     @FXML
@@ -55,8 +55,8 @@ public class DashboardController {
         attendancePane.setVisible(false);
         personnelPane.setVisible(true);
         reportPane.setVisible(false);
-        attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
-        reportButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
+        attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
+        reportButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
     }
 
     @FXML
@@ -64,8 +64,8 @@ public class DashboardController {
         attendancePane.setVisible(false);
         personnelPane.setVisible(false);
         reportPane.setVisible(true);
-        attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
-        personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
+        attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
+        personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
     }
 
     @FXML
@@ -77,7 +77,7 @@ public class DashboardController {
 
     @FXML
     public void reportMouseOn(MouseEvent mouseEvent) {
-        reportButton.setBackground(new Background(new BackgroundFill(Color.web("#eee2e2"), CornerRadii.EMPTY, null)));
+        reportButton.setBackground(new Background(new BackgroundFill(Color.web("#a2d47c"), CornerRadii.EMPTY, null)));
 
     }
 
@@ -86,13 +86,13 @@ public class DashboardController {
         if (reportPane.isVisible()) {
             reportButton.setBackground(new Background(new BackgroundFill(Color.web("#f7f4f4"), CornerRadii.EMPTY, null)));
         } else {
-            reportButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
+            reportButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
         }
     }
 
     @FXML
     public void personnelMouseOn(MouseEvent mouseEvent) {
-        personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#eee2e2"), CornerRadii.EMPTY, null)));
+        personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#a2d47c"), CornerRadii.EMPTY, null)));
     }
 
     @FXML
@@ -100,13 +100,13 @@ public class DashboardController {
         if (personnelPane.isVisible()) {
             personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#f7f4f4"), CornerRadii.EMPTY, null)));
         } else {
-            personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
+            personnelButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
         }
     }
 
     @FXML
     public void attendanceMouseOn(MouseEvent mouseEvent) {
-        attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#eee2e2"), CornerRadii.EMPTY, null)));
+        attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#a2d47c"), CornerRadii.EMPTY, null)));
     }
 
     @FXML
@@ -114,7 +114,7 @@ public class DashboardController {
         if (attendancePane.isVisible()) {
             attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#f7f4f4"), CornerRadii.EMPTY, null)));
         } else {
-            attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#40cd2f"), CornerRadii.EMPTY, null)));
+            attendanceButton.setBackground(new Background(new BackgroundFill(Color.web("#7ac143"), CornerRadii.EMPTY, null)));
         }
     }
 }

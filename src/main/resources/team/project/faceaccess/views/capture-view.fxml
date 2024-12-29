@@ -30,7 +30,7 @@
             <ProgressBar fx:id="progress" layoutX="185.0" layoutY="316.0" prefWidth="200.0" progress="0.0" />
          </children>
       </AnchorPane>
-      <Button fx:id="CloseButton" layoutX="562.0" layoutY="1.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#closeCapture" prefHeight="30.0" prefWidth="30.0" styleClass="circle-button" text="X">
+      <Button fx:id="CloseButton" layoutX="606.0" layoutY="7.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" onAction="#closeCapture" prefHeight="25.0" prefWidth="25.0" styleClass="circle-button" text="X">
          <font>
             <Font name="Roboto Light" size="18.0" />
          </font>

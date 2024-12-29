@@ -1,5 +1,7 @@
 package team.project.faceaccess.controllers;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,8 +14,10 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 import org.bytedeco.opencv.global.opencv_imgproc;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.bytedeco.opencv.opencv_core.Rect;
@@ -30,12 +34,19 @@ import team.project.faceaccess.utils.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class HomeController implements Initializable {
     @FXML
     private ImageView imageView;
+    @FXML
+    private Label time;
+    @FXML
+    private Label date;
     @FXML
     private Label recognitionResultlbl;
     @FXML
@@ -45,6 +56,9 @@ public class HomeController implements Initializable {
     @FXML
     private Tab recognitionTab;
     List<User> users;
+
+    @FXML
+    private Circle circle;
 
     void reloadClassifier() {
         File file = new File("photos//classifierLBPH.yml");
@@ -59,7 +73,6 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("initialize");
         String cascadePath = "photos//haarcascade_frontalface_alt.xml";
         File cascadeFile = new File(cascadePath);
         if (!cascadeFile.exists()) {
@@ -69,6 +82,28 @@ public class HomeController implements Initializable {
         cascade = new CascadeClassifier(cascadePath);
         reloadClassifier();
         tabPane.setTabMaxHeight(0);
+        setupDateTime();
+
+    }
+
+    private void setupDateTime() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            // Get current date and time
+            LocalDateTime now = LocalDateTime.now();
+
+            // Format for time (e.g., 13:45)
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            String formattedTime = now.format(timeFormatter);
+
+            // Format for date (e.g., Saturday, 28 December 2024)
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("EEEE, dd MMMM yyyy", Locale.ENGLISH);
+            String formattedDate = now.format(dateFormatter);
+            time.setText(formattedTime);
+            date.setText(formattedDate);
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
     }
 
     @FXML
@@ -98,7 +133,7 @@ public class HomeController implements Initializable {
     private final boolean runnable = true;
     private int idPerson = -1;
     private int counter = 0;
-
+    private final Controller dashboardController = new Controller();
 
     private void startCamera() {
         reloadClassifier();
@@ -116,11 +151,9 @@ public class HomeController implements Initializable {
 
                     RectVector detectedFaces = new RectVector();
                     cascade.detectMultiScale(grayImage, detectedFaces);
-                    System.out.println("faces N " + detectedFaces.size());
                     long facesNumber = detectedFaces.size();
                     for (int i = 0; i < facesNumber && facesNumber == 1; i++) {
                         Rect faceData = detectedFaces.get(i);
-
 
                         Mat croppedFace = new Mat(grayImage, faceData);
                         opencv_imgproc.resize(croppedFace, croppedFace, new org.bytedeco.opencv.opencv_core.Size(160, 160));
@@ -150,16 +183,21 @@ public class HomeController implements Initializable {
                                         opencv_imgproc.FONT_HERSHEY_SIMPLEX, 0.8,
                                         new org.bytedeco.opencv.opencv_core.Scalar(0, 255, 0, 3), 2, 0, false);
                                 if (user.isAdmin()) {
-                                    Platform.runLater(() -> new Controller().goToDashboard());
-                                    webSource.release();
-                                    imageView.setImage(null);
+                                    //Platform.runLater(dashboardController::goToDashboard );
+                                    //webSource.release();
+                                    //imageView.setImage(null);
+                                    System.out.println("You are an admin");
                                 }
                             }
 
                         }
                     }
                     Image fxImage = Utils.matToImage(cameraImage);
-                    Platform.runLater(() -> imageView.setImage(fxImage));
+                    Platform.runLater(() -> {
+                        imageView.setImage(fxImage);
+                        Circle clip = new Circle(220, 165, 165);
+                        imageView.setClip(clip);
+                    });
                 }
             }
         });
@@ -190,6 +228,11 @@ public class HomeController implements Initializable {
 
     @FXML
     Button CloseButton;
+
+    @FXML
+    private void goToHome(){
+
+    }
 
     @FXML
     private void closeLogin() {

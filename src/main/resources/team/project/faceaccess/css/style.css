@@ -20,7 +20,8 @@
     -fx-background-color: #78bc27;
 }
 
-.wallpaper {
-    --fx-background-image: url("../images/wallpaper1.jpg");
-
+.circle-button:hover .icon {
+    -fx-fill:#111;;
 }
+
+
