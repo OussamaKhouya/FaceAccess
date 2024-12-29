@@ -1,7 +1,7 @@
-.loginButton {
+Button {
     -fx-background-color:  #7ac143;
 }
-.loginButton:hover {
+Button:hover {
     -fx-background-color: #78bc27;
 }
 .circle-button {
@@ -23,5 +23,10 @@
 .circle-button:hover .icon {
     -fx-fill:#111;;
 }
+
+.bg {
+    -fx-background-color: #E9F7E9;
+}
+
 
 

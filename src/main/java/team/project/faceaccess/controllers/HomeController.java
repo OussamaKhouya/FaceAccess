@@ -84,32 +84,6 @@ public class HomeController implements Initializable {
     private CheckBox statusCheckBox;
 
 
-    void reloadClassifier() {
-        File file = new File("photos//classifierLBPH.yml");
-        if (file.exists()) {
-            if (recognizer != null)
-                recognizer = null;
-            recognizer = LBPHFaceRecognizer.create();
-            recognizer.read("photos//classifierLBPH.yml");
-            recognizer.setThreshold(80);
-        }
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        String cascadePath = "photos//haarcascade_frontalface_alt.xml";
-        File cascadeFile = new File(cascadePath);
-        if (!cascadeFile.exists()) {
-            throw new RuntimeException("Error: Classifier XML file not found at " + cascadePath);
-        }
-        users = metier.getAllUsers();
-        cascade = new CascadeClassifier(cascadePath);
-        reloadClassifier();
-        tabPane.setTabMaxHeight(0);
-        setupDateTime();
-
-    }
-
     private void setupDateTime() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             // Get current date and time
@@ -160,6 +134,31 @@ public class HomeController implements Initializable {
     private final Controller dashboardController = new Controller();
     private User user = null;
 
+    void reloadClassifier() {
+        File file = new File("photos//classifierLBPH.yml");
+        if (file.exists()) {
+            if (recognizer != null)
+                recognizer = null;
+            recognizer = LBPHFaceRecognizer.create();
+            recognizer.read("photos//classifierLBPH.yml");
+            recognizer.setThreshold(80);
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        String cascadePath = "photos//haarcascade_frontalface_alt.xml";
+        File cascadeFile = new File(cascadePath);
+        if (!cascadeFile.exists()) {
+            throw new RuntimeException("Error: Classifier XML file not found at " + cascadePath);
+        }
+        users = metier.getAllUsers();
+        cascade = new CascadeClassifier(cascadePath);
+        reloadClassifier();
+        tabPane.setTabMaxHeight(0);
+        setupDateTime();
+
+    }
     private void startCamera() {
         reloadClassifier();
 
@@ -168,94 +167,6 @@ public class HomeController implements Initializable {
             System.out.println("Error: Camera not available.");
             return;
         }
-//        Thread cameraThread = new Thread(() -> {
-//            long startTime = System.currentTimeMillis();
-//            List<FacePrediction> predictions = new ArrayList<>();
-//            while (runnable) {
-//                if (webSource.read(cameraImage)) {
-//                    Mat grayImage = new Mat();
-//                    opencv_imgproc.cvtColor(cameraImage, grayImage, opencv_imgproc.COLOR_BGRA2GRAY);
-//
-//                    RectVector detectedFaces = new RectVector();
-//                    cascade.detectMultiScale(grayImage, detectedFaces);
-//                    long facesNumber = detectedFaces.size();
-//                    Map<Integer, Integer> faceCount = new HashMap<>();
-//                    for (int i = 0; i < facesNumber && facesNumber == 1; i++) {
-//                        Rect faceData = detectedFaces.get(i);
-//
-//                        Mat croppedFace = new Mat(grayImage, faceData);
-//                        opencv_imgproc.resize(croppedFace, croppedFace, new org.bytedeco.opencv.opencv_core.Size(160, 160));
-//
-//                        int[] label = new int[1];
-//                        double[] confidence = new double[1];
-//                        recognizer.predict(croppedFace, label, confidence);
-//                        System.out.println("confidence: " + confidence[0]);
-//                        predictions.add(new FacePrediction(label[0], confidence[0], faceData));
-//                        if (label[0] == -1 || confidence[0] > 90) {
-//
-//                            idPerson = -1;
-//                            updateLabels("Unknown", "", "");
-//                            opencv_imgproc.rectangle(cameraImage, faceData, new org.bytedeco.opencv.opencv_core.Scalar(0, 0, 255, 3), 3, 0, 0);
-//
-//                        } else {
-//                            idPerson = label[0];
-//                            opencv_imgproc.rectangle(cameraImage, faceData, new org.bytedeco.opencv.opencv_core.Scalar(0, 255, 0, 3), 3, 0, 0);
-//                            if(user != null){
-//                                int textX = faceData.x();
-//                                int textY = Math.max(faceData.y() - 10, 0);
-//                                opencv_imgproc.putText(cameraImage, user.getFirstName() + " " + user.getLastName(),
-//                                        new org.bytedeco.opencv.opencv_core.Point(textX, textY),
-//                                        opencv_imgproc.FONT_HERSHEY_SIMPLEX, 0.8,
-//                                        new org.bytedeco.opencv.opencv_core.Scalar(0, 255, 0, 3), 2, 0, false);
-//                            }
-//                            faceCount.put(idPerson, faceCount.getOrDefault(idPerson, 0) + 1);
-//                            // Check elapsed time
-//                            long elapsedTime = System.currentTimeMillis() - startTime;
-//                            if (elapsedTime >= 300) { // 1 second window
-//                                if (!faceCount.isEmpty()) {
-//                                    // Get the most recognized face
-//                                    int mostRecognizedFace = faceCount.entrySet().stream()
-//                                            .max(Comparator.comparingInt(Map.Entry::getValue))
-//                                            .map(Map.Entry::getKey)
-//                                            .orElse(-1);
-//
-//                                    System.out.println("Most recognized face: " + mostRecognizedFace);
-//
-//                                // Reset for the next window
-//                                faceCount.clear();
-//                                startTime = System.currentTimeMillis();
-//                             user = fetchPersonData(mostRecognizedFace);
-//                            // Calculate position to draw the text (above the rectangle)
-//                            int textX = faceData.x();
-//                            int textY = Math.max(faceData.y() - 10, 0); // Ensure text doesn't go out of bounds
-//                            if (user != null) {
-//                                // Draw the name above the rectangle
-//                                opencv_imgproc.putText(cameraImage, user.getFirstName() + " " + user.getLastName(),
-//                                        new org.bytedeco.opencv.opencv_core.Point(textX, textY),
-//                                        opencv_imgproc.FONT_HERSHEY_SIMPLEX, 0.8,
-//                                        new org.bytedeco.opencv.opencv_core.Scalar(0, 255, 0, 3), 2, 0, false);
-//                                if (user.isAdmin()) {
-//                                    //Platform.runLater(dashboardController::goToDashboard );
-//                                    //webSource.release();
-//                                    //imageView.setImage(null);
-//                                    System.out.println("You are an admin");
-//                                }
-//                            }
-//                        }
-//                        }
-//                        }
-//                    }
-//
-//
-//                    Image fxImage = Utils.matToImage(cameraImage);
-//                    Platform.runLater(() -> {
-//                        imageView.setImage(fxImage);
-//                        Circle clip = new Circle(220, 165, 165);
-//                        imageView.setClip(clip);
-//                    });
-//                }
-//            }
-//        });
 
         Thread cameraThread = new Thread(() -> {
             long startTime = System.currentTimeMillis();
@@ -362,6 +273,8 @@ public class HomeController implements Initializable {
         cameraThread.setDaemon(true);
         cameraThread.start();
     }
+
+
 
     IMetier metier = new IMetierImp();
 

@@ -80,27 +80,6 @@ public class CaptureController implements Initializable {
 
     private CaptureController.DaemonThread myThread = null;
 
-    private void startCamera() {
-
-        new Thread(() -> {
-            webSource = new VideoCapture(0);
-
-            myThread = new CaptureController.DaemonThread();
-            Thread t = new Thread(myThread);
-            t.setDaemon(true);
-            myThread.runnable = true;
-            t.start();
-        }).start();
-    }
-
-    private void stopCamera() {
-        if(myThread != null){
-            myThread.setRunnable(false);
-        }
-        webSource.release();
-        imageView.setImage(null);
-
-    }
 
     private class DaemonThread implements Runnable {
         private volatile boolean runnable = false;
@@ -191,7 +170,27 @@ public class CaptureController implements Initializable {
         Platform.runLater(() -> capturedImageView.setImage(fxImage));
         saveButton.setDisable(false);
     }
+    private void startCamera() {
 
+        new Thread(() -> {
+            webSource = new VideoCapture(0);
+
+            myThread = new CaptureController.DaemonThread();
+            Thread t = new Thread(myThread);
+            t.setDaemon(true);
+            myThread.runnable = true;
+            t.start();
+        }).start();
+    }
+
+    private void stopCamera() {
+        if(myThread != null){
+            myThread.setRunnable(false);
+        }
+        webSource.release();
+        imageView.setImage(null);
+
+    }
 
     @FXML
     void connectButtonOnClick(ActionEvent event) {

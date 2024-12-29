@@ -14,4 +14,6 @@ public class Utils {
         BufferedImage bufferedImage = java2dConverter.convert(converter.convert(mat));
         return javafx.embed.swing.SwingFXUtils.toFXImage(bufferedImage, null);
     }
+
+
 }
