@@ -42,8 +42,9 @@ public class StartApplication extends Application {
                 throw new RuntimeException(ex);
             }
 
-            chargingStage.close();
             registerOrHomeView.show();
+            chargingStage.close();
+
         });
         delay.play();
 

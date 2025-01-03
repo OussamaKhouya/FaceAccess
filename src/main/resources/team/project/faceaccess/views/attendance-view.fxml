@@ -5,18 +5,19 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TreeView?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="461.0" prefWidth="624.0" styleClass="bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.AttendanceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="711.0" prefWidth="1024.0" styleClass="bg" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.AttendanceController">
    <children>
-      <HBox prefHeight="400.0" prefWidth="145.0">
+      <HBox layoutX="55.0" layoutY="50.0" prefHeight="406.0" prefWidth="189.0">
          <children>
-            <TreeView fx:id="roomTree" prefHeight="400.0" prefWidth="159.0" />
+            <TreeView fx:id="roomTree" prefHeight="450.0" prefWidth="186.0" />
          </children>
       </HBox>
-      <TableView fx:id="logTable" layoutX="166.0" layoutY="64.0" prefHeight="335.0" prefWidth="434.0">
+      <TableView fx:id="logTable" layoutX="270.0" layoutY="116.0" prefHeight="564.0" prefWidth="672.0">
          <columns>
             <TableColumn fx:id="logIdColumn" prefWidth="75.0" text="Log id" />
             <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="first name" />
@@ -24,11 +25,15 @@
             <TableColumn fx:id="dateColumn" prefWidth="76.0" text="Date" />
             <TableColumn fx:id="accessGrantedColumn" prefWidth="107.0" text="accessGranted" />
          </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
-      <DatePicker fx:id="fromDatePicker" layoutX="178.0" layoutY="26.0" prefHeight="16.0" prefWidth="115.0" />
-      <Text layoutX="178.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="from" textAlignment="CENTER" wrappingWidth="101.875" />
-      <Text layoutX="300.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="to" textAlignment="CENTER" wrappingWidth="101.875" />
-      <DatePicker fx:id="toDatePicker" layoutX="300.0" layoutY="26.0" prefHeight="16.0" prefWidth="115.0" />
-      <Button layoutX="507.0" layoutY="26.0" mnemonicParsing="false" onAction="#exportReport" text="Export Report" />
+      <DatePicker fx:id="fromDatePicker" layoutX="331.0" layoutY="50.0" prefHeight="25.0" prefWidth="125.0" />
+      <Text layoutX="277.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="From" textAlignment="CENTER" wrappingWidth="54.875" />
+      <Text layoutX="471.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="To" textAlignment="CENTER" wrappingWidth="40.875" />
+      <DatePicker fx:id="toDatePicker" layoutX="521.0" layoutY="50.0" prefHeight="25.0" prefWidth="125.0" />
+      <Button layoutX="711.0" layoutY="50.0" mnemonicParsing="false" onAction="#exportReport" text="Export Report" />
+      <ImageView fx:id="photoView" fitHeight="220.0" fitWidth="220.0" layoutX="40.0" layoutY="460.0" />
    </children>
 </AnchorPane>

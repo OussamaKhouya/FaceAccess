@@ -20,4 +20,8 @@ public class User {
     private Integer registredDate;
     private String sex;
     private boolean isAdmin = false;
+
+    public User(int id) {
+        this.id = id;
+    }
 }

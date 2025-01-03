@@ -24,8 +24,11 @@ public interface IMetier {
     void manageAccess(User user);
     void viewStatistics(User user);
     void viewGeneralStatistics();
-    void addLog(AccessLog log);
+    int addLog(AccessLog log);
     void deleteLog(AccessLog log);
+
+    void deleteLogbyUserId(int userId);
+
     List<AccessLog> getLogs();
     User fetchUserById(int userId);
     List<String> getAllDoors() throws SQLException; // Fetches a list of all unique doors (rooms)

@@ -12,34 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.0</junit.version>
-        <djl.version>0.32.0-SNAPSHOT</djl.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>tensorflow-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>djl.ai</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>ai.djl</groupId>
-                <artifactId>bom</artifactId>
-                <version>${djl.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
         <!-- SQLite JDBC Dependency -->
         <dependency>
@@ -102,71 +76,6 @@
             <artifactId>opencv-platform</artifactId>
             <version>4.10.0-1.5.11</version>
         </dependency>
-
-        <!---->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j2-impl</artifactId>
-            <version>2.24.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl</groupId>
-            <artifactId>api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl</groupId>
-            <artifactId>basicdataset</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl</groupId>
-            <artifactId>model-zoo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl.timeseries</groupId>
-            <artifactId>timeseries</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl.huggingface</groupId>
-            <artifactId>tokenizers</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ai.djl.audio</groupId>
-            <artifactId>audio</artifactId>
-        </dependency>
-        <!-- MXNet -->
-        <dependency>
-            <groupId>ai.djl.mxnet</groupId>
-            <artifactId>mxnet-model-zoo</artifactId>
-        </dependency>
-        <!-- Pytorch -->
-        <dependency>
-            <groupId>ai.djl.pytorch</groupId>
-            <artifactId>pytorch-model-zoo</artifactId>
-        </dependency>
-        <!-- TensorFlow -->
-        <dependency>
-            <groupId>ai.djl.tensorflow</groupId>
-            <artifactId>tensorflow-model-zoo</artifactId>
-        </dependency>
-        <!-- ONNXRuntime -->
-        <dependency>
-            <groupId>ai.djl.onnxruntime</groupId>
-            <artifactId>onnxruntime-engine</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>7.10.2</version>
-            <scope>test</scope>
-        </dependency>
-        <!---->
-
-        <dependency>
-            <groupId>com.github.sarxos</groupId>
-            <artifactId>webcam-capture</artifactId>
-            <version>0.3.12</version>
-        </dependency>
-
     </dependencies>
 
     <build>

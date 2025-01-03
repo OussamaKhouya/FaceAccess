@@ -40,7 +40,6 @@ public class UsersManagementController implements Initializable {
 
     @FXML
     private TableColumn<User, String> nameColumn;
-
     @FXML
     private Button addButton;
 
@@ -85,6 +84,8 @@ public class UsersManagementController implements Initializable {
 
     @FXML
     private CheckBox statusCheckBox;
+    @FXML
+    private CheckBox isAdminCheckBox;
 
     @FXML
     private Button uploadPhotoBtn;
@@ -101,6 +102,7 @@ public class UsersManagementController implements Initializable {
         firstNameField.setText("");
         lastNameField.setText("");
         statusCheckBox.setSelected(false);
+        isAdminCheckBox.setSelected(false);
         departmentField.setText("");
         registredDate.setValue(LocalDate.now());
         sexComboBox.getSelectionModel().select("");
@@ -115,6 +117,7 @@ public class UsersManagementController implements Initializable {
             firstNameField.setText(user.getFirstName());
             lastNameField.setText(user.getLastName());
             statusCheckBox.setSelected(user.getAccess());
+            isAdminCheckBox.setSelected(user.isAdmin());
             departmentField.setText(user.getDoor());
             registredDate.setValue(LocalDate.ofEpochDay(user.getRegistredDate()));
             sexComboBox.getSelectionModel().select(user.getSex());
@@ -131,6 +134,7 @@ public class UsersManagementController implements Initializable {
         user.setFirstName(firstNameField.getText());
         user.setLastName(lastNameField.getText());
         user.setAccess(statusCheckBox.isSelected());
+        user.setAdmin(isAdminCheckBox.isSelected());
         user.setDoor(departmentField.getText());
         user.setId(Integer.parseInt(UserIdField.getText()));
         user.setRegistredDate((int) registredDate.getValue().toEpochDay());
@@ -158,6 +162,7 @@ public class UsersManagementController implements Initializable {
             alert.showAndWait().ifPresent(response -> {
                 if (response == ButtonType.OK) {
                     User p = usersTable.getSelectionModel().getSelectedItem();
+                    metier.deleteLogbyUserId(p.getId());
                     metier.deleteUser(p.getId());
                     deleteUserPohtos(p.getId());
                     clearUserForm();
@@ -165,8 +170,11 @@ public class UsersManagementController implements Initializable {
                 }
             });
         }
+    }
 
-
+    @FXML
+    void onClearBtnClicked(ActionEvent event) throws IOException {
+        clearUserForm();
     }
 
     @FXML
@@ -176,6 +184,7 @@ public class UsersManagementController implements Initializable {
             user.setFirstName(firstNameField.getText());
             user.setLastName(lastNameField.getText());
             user.setAccess(statusCheckBox.isSelected());
+            user.setAdmin(isAdminCheckBox.isSelected());
             user.setDoor(departmentField.getText());
             user.setRegistredDate((int) registredDate.getValue().toEpochDay());
             user.setSex(sexComboBox.getSelectionModel().getSelectedItem());
@@ -197,13 +206,11 @@ public class UsersManagementController implements Initializable {
                 new SimpleStringProperty(cellData.getValue().getFirstName() + " " + cellData.getValue().getLastName())
         );
         reloadTable();
-
         sexComboBox.getItems().removeAll(sexComboBox.getItems());
         sexComboBox.getItems().addAll("", "Male", "Female");
         sexComboBox.getSelectionModel().select("");
 
     }
-
 
     void generateFakeData() {
         // Create a list of User objects

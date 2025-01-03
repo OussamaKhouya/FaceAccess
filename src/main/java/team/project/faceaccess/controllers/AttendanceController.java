@@ -11,6 +11,8 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert;
 
@@ -28,6 +30,7 @@ import team.project.faceaccess.metier.IMetierImp;
 import team.project.faceaccess.models.AccessLog;
 import team.project.faceaccess.models.User;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -63,7 +66,7 @@ public class AttendanceController implements Initializable {
     private TableColumn<AccessLog, String> dateColumn;
 
     @FXML
-    private TableColumn<AccessLog, Boolean> accessGrantedColumn;
+    private TableColumn<AccessLog, String> accessGrantedColumn;
 
     @FXML
     private ObservableList<AccessLog> logs;
@@ -79,14 +82,20 @@ public class AttendanceController implements Initializable {
         // Set up table columns
         logIdColumn.setCellValueFactory(cellData ->
                 new SimpleObjectProperty<>(cellData.getValue().getId()));
-        firstNameColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getUser().getFirstName()));
-        lastNameColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty(cellData.getValue().getUser().getLastName()));
+        firstNameColumn.setCellValueFactory(cellData -> {
+            User user = cellData.getValue().getUser();
+            return new SimpleStringProperty(user != null ? user.getFirstName() : "Unknown");
+        });
+        lastNameColumn.setCellValueFactory(cellData -> {
+            User user = cellData.getValue().getUser();
+            return new SimpleStringProperty(user != null ? user.getLastName() : "Unknown");
+        });
         dateColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getTimestamp().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
-        accessGrantedColumn.setCellValueFactory(cellData ->
-                new SimpleBooleanProperty(cellData.getValue().isAccessGranted()).asObject());
+        accessGrantedColumn.setCellValueFactory(cellData -> {
+            boolean accessGranted = cellData.getValue().isAccessGranted();
+            return new SimpleStringProperty(accessGranted ? "Yes" : "No");
+        });
 
         // Load logs
         loadLogs();
@@ -105,20 +114,30 @@ public class AttendanceController implements Initializable {
         // Add a listener to the root of the checkbox tree
         CheckBoxTreeItem<String> root = (CheckBoxTreeItem<String>) roomTree.getRoot();
         root.addEventHandler(CheckBoxTreeItem.checkBoxSelectionChangedEvent(), event -> filterLogs());
+        // Add a listener for row selection
+        logTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                // Get the ID of the selected row
+                int selectedId = newSelection.getId();
+                File file = new File(String.format("photos/unknown/%d.png", selectedId));
+                Image image = new Image(file.toURI().toString());
+                photoView.setImage(image);
+            }
+        });
     }
 
     private void loadLogs() {
         logs = FXCollections.observableArrayList(metier.getLogs());
         logTable.setItems(logs);
     }
+    @FXML
+    private ImageView photoView;
 
     private void loadRoomTree() {
         // Root node for the TreeView with a checkbox
         CheckBoxTreeItem<String> root = new CheckBoxTreeItem<>("Doors");
         root.setExpanded(true);
         root.setSelected(true);
-
-
 
         // Fetch all doors from the metier layer
         List<String> doors = null;

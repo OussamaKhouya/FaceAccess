@@ -69,4 +69,10 @@ public class RegisterController  {
         }
 
     }
+
+    public void closeLogin(ActionEvent actionEvent) {
+        // Get the current stage using the button's scene
+        Stage stage = (Stage) CloseButton.getScene().getWindow();
+        stage.close();
+    }
 }

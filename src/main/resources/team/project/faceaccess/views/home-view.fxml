@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="728.0" prefWidth="1024.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.HomeController">
+<AnchorPane prefHeight="728.0" prefWidth="1024.0" style="-fx-background-color: white;" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="team.project.faceaccess.controllers.HomeController">
    <TabPane fx:id="tabPane" layoutY="22.0" prefHeight="706.0" prefWidth="1024.0" tabClosingPolicy="UNAVAILABLE">
       <tabs>
          <Tab fx:id="homeTab">
@@ -72,18 +72,16 @@
             <content>
                <AnchorPane>
                   <children>
-                     <HBox layoutX="42.0" layoutY="31.0" style="-fx-border-color: #ddd;">
+                     <HBox layoutX="52.0" layoutY="122.0">
                         <children>
                            <ImageView fx:id="imageView" fitHeight="330.0" fitWidth="440.0" pickOnBounds="true" preserveRatio="true" />
                         </children>
                      </HBox>
-                     <Label fx:id="recognitionResultlbl" layoutX="367.0" layoutY="422.0" prefHeight="20.0" prefWidth="290.0" textAlignment="CENTER">
+                     <Button layoutX="682.0" layoutY="80.0" mnemonicParsing="false" onAction="#showDetails" prefHeight="51.0" prefWidth="160.0" text="Check in">
                         <font>
-                           <Font size="14.0" />
-                        </font>
-                     </Label>
-                     <Button layoutX="657.0" layoutY="31.0" mnemonicParsing="false" onAction="#showDetails" prefHeight="51.0" prefWidth="160.0" text="Show More Details" />
-                     <VBox layoutX="574.0" layoutY="113.0" prefHeight="259.0" prefWidth="327.0" spacing="10">
+                           <Font name="Roboto" size="14.0" />
+                        </font></Button>
+                     <VBox layoutX="587.0" layoutY="149.0" prefHeight="303.0" prefWidth="349.0" spacing="10">
                         <padding>
                            <Insets top="20.0" />
                         </padding>
@@ -97,25 +95,25 @@
                            <HBox spacing="20">
                               <children>
                                  <Label prefWidth="88.0" text="Resident ID:" />
-                                 <TextField fx:id="UserIdField" editable="false" prefWidth="150.0" />
+                                 <TextField fx:id="UserIdField" editable="false" prefHeight="25.0" prefWidth="168.0" />
                               </children>
                            </HBox>
                            <HBox spacing="20">
                               <children>
                                  <Label prefWidth="88.0" text="First Name:" />
-                                 <TextField fx:id="firstNameField" editable="false" prefWidth="150" />
+                                 <TextField fx:id="firstNameField" editable="false" prefHeight="25.0" prefWidth="170.0" />
                               </children>
                            </HBox>
                            <HBox spacing="20">
                               <children>
                                  <Label prefWidth="88.0" text="Last Name:" />
-                                 <TextField fx:id="lastNameField" editable="false" prefWidth="150" />
+                                 <TextField fx:id="lastNameField" editable="false" prefHeight="25.0" prefWidth="173.0" />
                               </children>
                            </HBox>
                            <HBox spacing="20">
                               <children>
                                  <Label prefWidth="88.0" text="Door" />
-                                 <TextField fx:id="departmentField" editable="false" prefWidth="150" />
+                                 <TextField fx:id="departmentField" editable="false" prefHeight="25.0" prefWidth="174.0" />
                               </children>
                            </HBox>
                            <HBox spacing="20">
@@ -127,13 +125,24 @@
                            <HBox spacing="20">
                               <children>
                                  <Label prefWidth="88.0" text="Sex" />
-                                 <ComboBox fx:id="sexComboBox" prefWidth="150" />
+                                 <ComboBox fx:id="sexComboBox" prefHeight="25.0" prefWidth="175.0" />
                               </children>
                            </HBox>
-                           <HBox layoutX="10.0" layoutY="30.0" spacing="20">
+                           <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="30.0" spacing="20">
                               <children>
                                  <Label prefWidth="88.0" text="is Admin" />
                                  <CheckBox fx:id="isAdmin" />
+                                 <Button fx:id="goToDashBtn" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" onAction="#goToDashboard" prefHeight="28.0" prefWidth="148.0" text="Go to Dashboard">
+                                    <font>
+                                       <Font name="Roboto" size="14.0" />
+                                    </font>
+                                    <HBox.margin>
+                                       <Insets left="60.0" />
+                                    </HBox.margin>
+                                    <graphic>
+                                       <FontAwesomeIconView glyphName="DASHBOARD" />
+                                    </graphic>
+                                 </Button>
                               </children>
                            </HBox>
                         </children>

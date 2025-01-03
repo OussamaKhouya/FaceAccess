@@ -23,6 +23,12 @@ public class Helpers {
         return midnight.format(formatter);
     }
 
+    public static String getDateTimeNow() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH mm ss");
+        return now.format(formatter);
+    }
+
     public static String getDateTimeAtStartOfWeek() {
         LocalDate today = LocalDate.now();
 
@@ -57,7 +63,7 @@ public class Helpers {
 
     public static Map<String, String> getLastDaysNames() {
         Locale enLocal = new Locale("en", "EN");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE",enLocal);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE", enLocal);
         Map<String, String> days = new HashMap<>();
         LocalDate today = LocalDate.now();
         days.put("today", "today");

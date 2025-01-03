@@ -32,14 +32,14 @@
                      <padding>
                         <Insets left="15.0" right="15.0" />
                      </padding></Button>
-                  <Button fx:id="personnelButton" layoutX="285.0" layoutY="3.0" mnemonicParsing="false" onAction="#personnelHandler" onMouseEntered="#personnelMouseOn" onMouseExited="#personnelMouseOff" prefHeight="40.0" prefWidth="94.0" text="Personnel">
+                  <Button fx:id="personnelButton" layoutX="285.0" layoutY="3.0" mnemonicParsing="false" onAction="#personnelHandler" onMouseEntered="#personnelMouseOn" onMouseExited="#personnelMouseOff" prefHeight="40.0" prefWidth="115.0" text="Management">
                      <font>
                         <Font name="Roboto Light" size="14.0" />
                      </font>
                      <padding>
                         <Insets left="15.0" right="15.0" />
                      </padding></Button>
-                  <Button fx:id="attendanceButton" layoutX="385.0" layoutY="3.0" mnemonicParsing="false" onAction="#attendanceHandler" onMouseEntered="#attendanceMouseOn" onMouseExited="#attendanceMouseOff" prefHeight="40.0" prefWidth="93.0" text="Attendance">
+                  <Button fx:id="attendanceButton" layoutX="406.0" layoutY="3.0" mnemonicParsing="false" onAction="#attendanceHandler" onMouseEntered="#attendanceMouseOn" onMouseExited="#attendanceMouseOff" prefHeight="40.0" prefWidth="93.0" text="Attendance">
                      <font>
                         <Font name="Roboto Light" size="14.0" />
                      </font></Button>

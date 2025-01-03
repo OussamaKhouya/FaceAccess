@@ -22,7 +22,7 @@ public class IMetierImp implements IMetier {
         Connection connection = SingletonConnexionDB.getConnexion();
         List<User> users = new ArrayList<>();
         try {
-            String query = "SELECT id, firstName, lastName, access, door, registredDate, sex, isAdmin FROM Users";
+            String query = "SELECT id, firstName, lastName, access, door, registredDate, sex, isAdmin FROM Users where id!= 99";
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
@@ -81,7 +81,7 @@ public class IMetierImp implements IMetier {
         Connection connection = SingletonConnexionDB.getConnexion();
 
         try {
-            String query = "INSERT INTO Users (id, firstName, lastName, access, door, registredDate, sex) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO Users (id, firstName, lastName, access, door, registredDate, sex, isAdmin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setInt(1, user.getId());
@@ -91,6 +91,7 @@ public class IMetierImp implements IMetier {
             preparedStatement.setString(5, user.getDoor());
             preparedStatement.setInt(6, user.getRegistredDate());
             preparedStatement.setString(7, user.getSex());
+            preparedStatement.setBoolean(8, user.isAdmin());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (Exception e) {
@@ -144,7 +145,7 @@ public class IMetierImp implements IMetier {
         Connection connection = SingletonConnexionDB.getConnexion();
         try {
             //String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ? WHERE id = ?";
-            String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ?, door = ?, registredDate = ?, sex = ? WHERE id = ?";
+            String query = "UPDATE Users SET firstName = ?, lastName = ?, access = ?, door = ?, registredDate = ?, sex = ?, isAdmin = ? WHERE id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setString(1, user.getFirstName());
@@ -153,7 +154,8 @@ public class IMetierImp implements IMetier {
             preparedStatement.setString(4, user.getDoor());
             preparedStatement.setInt(5, user.getRegistredDate());
             preparedStatement.setString(6, user.getSex());
-            preparedStatement.setInt(7, user.getId());
+            preparedStatement.setBoolean(7, user.isAdmin());
+            preparedStatement.setInt(8, user.getId());
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -252,10 +254,10 @@ public class IMetierImp implements IMetier {
     }
 
     @Override
-    public void addLog(AccessLog log) {
+    public int addLog(AccessLog log) {
         Connection connection = SingletonConnexionDB.getConnexion();
         String query = "INSERT INTO AccessLog (userId, timestamp, accessGranted) VALUES (?, ?, ?)";
-
+        int generatedId = -1; // Default value to indicate failure
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setInt(1, log.getUser().getId()); // Set the user ID
 
@@ -267,11 +269,17 @@ public class IMetierImp implements IMetier {
             pstmt.setString(2, formattedTimestamp); // Use the formatted current timestamp
             pstmt.setBoolean(3, log.isAccessGranted()); // Set the accessGranted flag
 
-            pstmt.executeUpdate();
+             pstmt.executeUpdate();
+            // Retrieve the generated key
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    generatedId = generatedKeys.getInt(1);
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        return generatedId;
     }
 
     @Override
@@ -285,7 +293,19 @@ public class IMetierImp implements IMetier {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
 
+    @Override
+    public void deleteLogbyUserId(int userId) {
+        Connection connection = SingletonConnexionDB.getConnexion();
+        String query = "DELETE FROM AccessLog WHERE userId = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, userId);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -387,10 +407,13 @@ public class IMetierImp implements IMetier {
         try {
             preparedStatement = connection.prepareStatement(query);
             ResultSet rs = preparedStatement.executeQuery();
-            return rs.next();
+            while (rs.next()){
+                return rs.getInt(1) == 1;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return false;
     }
 
 
