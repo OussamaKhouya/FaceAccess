@@ -54,12 +54,7 @@ public class RegisterController  {
             if (password.equals(adminPasswordConfirme.getText())) {
                 admin.setPassword(password);
                 metier.addAdmin(admin);
-                Stage stage = new Stage();
-                FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("views/login-view.fxml"));
-                Scene scene = new Scene(fxmlLoader.load());
-                stage.setScene(scene);
-                stage.initStyle(StageStyle.UNDECORATED);
-                stage.show();
+                new Controller().goToDashboard();
                 closeRegister();
             }else{
                 Alert alert = new Alert(Alert.AlertType.ERROR);

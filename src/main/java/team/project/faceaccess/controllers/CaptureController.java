@@ -110,7 +110,7 @@ public class CaptureController implements Initializable {
                             if (saveButton.isPressed()) { //when the saveButton is pressed
                                 if (sample <= maxNumSamples) {
                                     // Save cropped face as an image file
-                                    String outputPath = "photos//person." + user.getId() + "." + sample + ".jpg";
+                                    String outputPath = "photos/train/person." + user.getId() + "." + sample + ".jpg";
                                     opencv_imgcodecs.imwrite(outputPath, resizedFace);
                                     System.out.println("Saved face at " + outputPath);
 
@@ -125,7 +125,10 @@ public class CaptureController implements Initializable {
                                     stopCamera(); // Stop the camera
                                     System.out.println("user id=" + user.getId());
                                     saveButtonOnClick();
-                                    Platform.runLater(() ->closeWindows());
+                                    Platform.runLater(() -> {
+
+                                        closeWindows();
+                                    });
                                 }
                             }
                         }

@@ -323,6 +323,7 @@ public class UsersManagementController implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(StartApplication.class.getResource("views/capture-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             Stage stage = new Stage();
+            stage.initStyle(StageStyle.UNDECORATED);
             CaptureController controller = fxmlLoader.getController();
             controller.setUser(user);
             controller.setParentController(this);

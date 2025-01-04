@@ -200,7 +200,7 @@ public class IMetierImp implements IMetier {
         String query = "";
         try {
 
-            query = "select count(*) from AccessLog where accessGranted = ? and timestamp > ?";
+            query = "select count( distinct  userId) from AccessLog where accessGranted = ? and timestamp > ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, accessGranted);
             preparedStatement.setString(2, timestamp);

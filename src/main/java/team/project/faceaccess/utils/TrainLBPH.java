@@ -19,7 +19,7 @@ public class TrainLBPH {
      * ID of each photo and generates the "trainer" for the LBPH algorithm.
      */
     public void trainPhotos() {
-        File directory = new File("C:\\photos\\");
+        File directory = new File("photos/train");
         FilenameFilter filter = (File dir, String name1) -> name1.endsWith(".jpg") || name1.endsWith(".png");
 
         File[] files = directory.listFiles(filter);
@@ -45,7 +45,7 @@ public class TrainLBPH {
 
         LBPHFaceRecognizer lbph = LBPHFaceRecognizer.create(1, 8, 8, 8, 12);
         lbph.train(photos, labels);
-        lbph.save("C:\\photos\\classifierLBPH.yml");
+        lbph.save("photos/classifierLBPH.yml");
     }
 
 }
